@@ -5,7 +5,6 @@
     <meta charset="utf-8">
     <meta name="viewport" 
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" 
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/
@@ -13,38 +12,24 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiG
                      gFAW/dAiS6JXm" 
           crossorigin="anonymous">
-
     <!-- Title text -->
     <title>Concentration - A Test of Memory!</title>
-
     <link rel="stylesheet" href="css/style.css">
-
   </head>
   <body>
     <!-- Optional JavaScript -->
     <div class="container">
-        <div class="row">
-            <div class="col-12">
-
-                <!-- nested container for gameboard -->
-                <div class="board-container container">
-                    <div class="row">
-
-                        <!-- gameboard squares -->
-                        <div class="col-3 board-square">
-                            <div class="face-container">
-                                <div class="facedown"></div>
-                                <div class="faceup"></div>
-                            </div>
-
-                        </div>
-                    </div> 
-                </div>
-
+      <div class="row">
+         <div class="col-12">
+            <!-- nested container for gameboard -->
+            <div class="board-container container">
+              <div id="gameboard" class="row">
+                <!-- generate board squares dynamically -->
+              </div> 
             </div>
         </div>
+      </div>
     </div>
-
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" 
             integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/
@@ -60,8 +45,7 @@
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdA
                        yjUar5+76PVCmYl" 
             crossorigin="anonymous"></script>
-
-  <!-- add line below -->
-  <script src="js/main.js" charset="utf-8"></script>
+    <!-- add line below -->
+    <script src="js/main.js" charset="utf-8"></script>
   </body>
 </html>
