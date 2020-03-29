@@ -11,24 +11,50 @@ body {
   height: 767px;
   width: 767px;
   padding: 4px;
-  background: #FFFFFF;
+  background: white;
 }
     
 .cell {
   height: 61px;
   width: 61px;
+  border-style: solid;
+  border-width: 0px;
   border-radius: 8px;
   margin: 4px;
   padding: 2px;
   float: left;
-  background-color: #000000;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center center;
-  color: #FFFFFF;
+  opacity: .33;
+  line-height: 57px;
   text-align: center;
+  color: white;
   font-family: sans-serif;
   font-size: 50px;
   font-weight: 900;
 }
 
+.three-digits {
+  font-size: 35px;
+}
+
+.back {
+  font-size: 0px;
+}
+
+.no-frame, .small-frame, .medium-frame {
+  background-color: white !important; 
+}
+
+.small-frame {
+  border-width: 8px;
+}
+
+.medium-frame {
+  border-width: 20px;
+}
+
+.all-frame, .guide {
+} 
+
+.is-selected {
+  opacity: 1;
+}
