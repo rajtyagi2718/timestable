@@ -1,3 +1,4 @@
+/* refactor cell-hiden */
 *,
 *::before,
 *::after {
@@ -14,7 +15,19 @@ body {
   background: white;
 }
     
-.cell {
+/*  
+5 default cells:
+  .cell -- filled with text
+  .cell-no-text -- filled, no text
+  .cell-clear -- transparent, no text
+  .cell-thin-frame -- transparent with thin frame, no text
+  .cell-thick-frame -- transparent with tick frame, no text
+2 flags:
+  .cell-guide -- identical to cell
+  .cell-is-selected -- full opacity
+*/
+
+.cell, .cell-guide {
   height: 61px;
   width: 61px;
   border-style: solid;
@@ -36,24 +49,27 @@ body {
   font-size: 35px;
 }
 
-.back {
+/*
+.cell-hidden {
+  visibility: hidden;
+}
+*/
+
+.cell-hidden, .cell-thin-frame, .cell-thick-frame, .cell-no-text {
   font-size: 0px;
 }
 
-.no-frame, .small-frame, .medium-frame {
+.cell-hidden, .cell-thin-frame, .cell-thick-frame {
   background-color: white !important; 
 }
 
-.small-frame {
+.cell-thin-frame {
   border-width: 8px;
 }
 
-.medium-frame {
+.cell-thick-frame {
   border-width: 20px;
 }
-
-.all-frame, .guide {
-} 
 
 .is-selected {
   opacity: 1;
