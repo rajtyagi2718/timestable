@@ -1,100 +1,150 @@
-// hidden cell node siblings
 // keyboard input
 // keypad widget
 
-function assert(condition, message) {
-  if (!condition) {
-    throw message || "Assertion failed";
+//// js preamble ////
+
+function assert(condition, message) 
+{
+  if (!condition) 
+  { throw message || "Assertion failed";
   }
 }
 
-const cellStop = 11;
 
-const colorArray = [
-  '#BEC2CB',
-  '#F8EECA', '#F5DC9A', '#8EB155', '#497367', '#2B3F00',
-  '#764000', '#E19E57', '#010570', '#3266B2', '#B8F7FE',
-  '#FFFFFF', '#000000',
-];
+//// cell functions ////
 
-const scoreArray = Array(cellStop).fill().map(() => Array(cellStop).fill(0));
+const cellClassListObject =
+{ "cell-clear" : ["background-color-white"],
+  "cell-thin"  : ["background-color-white", "cell-border-width-thin"],
+  "cell-thick" : ["background-color-white", "cell-border-width-thick"],
+  "cell-fill"  : [],
+  "cell-text"  : ["cell-text"],
+};
 
-function increaseScoreGuide(i, j) {
+function addCellClassList(cell, name)
+{ 
+  cellClassListObject[name].forEach(function(item)
+  { cell.classList.add(item);
+  });
+}
+
+function removeCellClassList(cell, name)
+{ 
+  cellClassListObject[name].forEach(function(item)
+  { cell.classList.remove(item);
+  });
+}
+
+
+const gridSize = 11;
+
+const cellTextArray = Array(gridSize).fill().map(() => Array(gridSize));
+
+cellTextArray[0][0] = "\u00D7";
+
+for (let i = 1; i < gridSize; ++i)
+{ cellTextArray[i][0] = i.toString();
+};
+
+for (let j = 1; j < gridSize; ++j)
+{ cellTextArray[0][j] = j.toString();
+};
+
+for (let i = 1; i < gridSize; ++i)
+{ for (let j = 1; j < gridSize; ++j)
+  { cellTextArray[i][j] = (i*j).toString();
+  }
+};
+
+function getCellText(i, j)
+{
+  return cellTextArray[i][j];
+}
+
+
+function getCellClassColor(i)
+{
+  return "color-" + i.toString();
+}
+
+const cellScoreArray = Array(gridSize).fill().map(() => Array(gridSize).fill(0));
+
+function getCellScore(i, j)
+{ return cellScoreArray[i][j];
+}
+  
+function incrementCellFactorScore(i, j) 
+{
   scoreArray[i][j] += 1;
 }
 
-function increaseScoreProduct(i, j) {
-  if (scoreArray[i][j] < 3) { scoreArray[i][j] += 1; }
+function incrementCellProductScore(i, j) 
+{
+  if (scoreArray[i][j] < 3) 
+  { scoreArray[i][j] += 1; 
+  }
 }
 
-const frameArray = [
-  'cell-hidden', 'cell-thin-frame', 'cell-thick-frame', 'cell-no-text'
+
+const cellProductNameArray = 
+[ "cell-clear", "cell-thin", "cell-thick", "cell-fill"
 ];
 
-function textCellRowCol(i, j) {
-  let text;
-  if (i && j) {
-    text = (i*j).toString();
-  }
-  else if (i) {
-    text = i.toString();
-  }
-  else if (j) {
-    text = j.toString();
-  }
-  else {
-    text = '\u00D7';
-  }
-  return text;
+function getCellProductName(score)
+{ 
+  return (score < 4) cellProductNameArray[score] : cellProductNameArray[3];
 }
 
-function getCellIdByRowCol(i, j) {
-  return i.toString() + ' ' + j.toString();
+
+function getCellId(i, j) 
+{
+  return i.toString() + " " + j.toString();
 }
 
-const game = document.getElementById('game');
-const grid = document.createElement('section');
-grid.setAttribute('class', 'grid');
+function getCell(i, j) {
+  return document.getElementById(getCellId(i, j));
+}
+
+
+//// grid creation ////
+
+const game = document.getElementById("game");
+const grid = document.createElement("section");
+grid.setAttribute("class", "grid");
 game.appendChild(grid);
 
-for (let i = 0; i < cellStop; i++) {
-  for (let j = 0; j < cellStop; j++) {
-    const cell = document.createElement('div');
-    cell.classList.add('cell');
-    cell.id = getCellIdByRowCol(i, j);
-    cell.textContent = textCellRowCol(i, j);
-    cell.style['border-color'] = colorArray[i]; 
-    cell.style['background-color'] = colorArray[i];
-    cell.classList.add('cell-no-text');
-    if (i && j) {
-      cell.classList.add('cell-hidden');
-    } 
-    else {
-      cell.classList.add('cell-guide');
+for (let i = 0; i < gridSize; i++) 
+{ for (let j = 0; j < gridSize; j++) 
+{   const cell = document.createElement("div");
+    cell.classList.add("cell");
+    cell.id = getCellId(i, j);
+    cell.textContent = getCellText(i, j);
+    cell.classList.add(getCellClassColor(i));
+    if (i && j) 
+    { addCellClassList(cell, "cell-clear");
     }
+    else
+    { addCellClassList(cell, "cell-fill");
+    } 
     grid.appendChild(cell);
   }
 };
 
-function getCellByRowCol(i, j) {
-  return document.getElementById(getCellIdByRowCol(i, j));
-}
-
-getCellByRowCol(10, 10).classList.toggle('three-digits');
+getCell(10, 10).classList.add("cell-font-medium");
 
 function getScore(cell) {
-  let [row, col] = cell.id.split(' ');
+  let [row, col] = cell.id.split(" ");
   row = parseInt(row);
   col = parseInt(col);
   return scoreArray[row][col];
 } 
 
 function increaseScoreCell(cell) {
-  let [row, col] = cell.id.split(' ');
+  let [row, col] = cell.id.split(" ");
   row = parseInt(row);
   col = parseInt(col);
   score = scoreArray[row][col];
-  if (score < 3 || cell.classList.contains('cell-guide')) {
+  if (score < 3 || cell.classList.contains("cell-guide")) {
     scoreArray[row][col]++;
   }
 }
@@ -104,61 +154,61 @@ function toggleCellFrame(cell) {
 }
 
 function selectCell(cell) {
-  if (cell.classList.contains('cell-guide')) {
-    if (cell.classList.toggle('is-selected')) {
-      cell.classList.toggle('cell-no-text');
+  if (cell.classList.contains("cell-guide")) {
+    if (cell.classList.toggle("is-selected")) {
+      cell.classList.toggle("cell-no-text");
       increaseScoreCell(cell);
     } 
-    else { cell.classList.add('cell-no-text'); }
+    else { cell.classList.add("cell-no-text"); }
   } 
-  else if (cell.classList.contains('cell-no-text')) {
-    if (cell.classList.contains('is-selected')) {
-      cell.classList.remove('cell-no-text');
+  else if (cell.classList.contains("cell-no-text")) {
+    if (cell.classList.contains("is-selected")) {
+      cell.classList.remove("cell-no-text");
     } 
     else {
       cell.classList.remove(frameArray[getScore(cell)]);    
-      cell.classList.add('is-selected');
+      cell.classList.add("is-selected");
     } 
   }
   else {
     increaseScoreCell(cell);
     cell.classList.add(frameArray[getScore(cell)]);
-    cell.classList.add('cell-no-text');
-    cell.classList.remove('is-selected');
+    cell.classList.add("cell-no-text");
+    cell.classList.remove("is-selected");
   }
 }
 
 function toggleCellGuide(i, j) {
-  assert(i == 0 || j == 0, 'selectCellGuide requires nonzero int pair');
+  assert(i == 0 || j == 0, "selectCellGuide requires nonzero int pair");
   let cell = getCellByRowCol(i, j);
-  if (cell.classList.toggle('cell-no-text')) { increaseScoreGuide(i, j); }
-  cell.classList.toggle('is-selected'); 
+  if (cell.classList.toggle("cell-no-text")) { increaseScoreGuide(i, j); }
+  cell.classList.toggle("is-selected"); 
 } 
 
 function selectCellProduct(i, j) {
-  assert(i || j, 'selectCellProduct requires both coordiantes nonzero');
+  assert(i || j, "selectCellProduct requires both coordiantes nonzero");
   let cell = getCellByRowCol(i, j);
-  assert(cell.classList.contains('cell-no-text'),
-    'selectCellProduct cell must have no text');
+  assert(cell.classList.contains("cell-no-text"),
+    "selectCellProduct cell must have no text");
   toggleCellFrame(cell);  
-  cell.classList.add('is-selected');
+  cell.classList.add("is-selected");
 }
 
 function deselectCellProduct(i, j) {
-  assert(i || j, 'deselectCellProduct requires both coordiantes nonzero');
+  assert(i || j, "deselectCellProduct requires both coordiantes nonzero");
   let cell = getCellByRowCol(i, j);
-  assert(cell.classList.contains('is-selected'),
-    'deselectCellProduct cell must be selected');
-  assert(!cell.classList.contains('cell-no-text'),
-    'deselectCellProduct cell must contain text');
-  cell.classList.add('cell-no-text');
+  assert(cell.classList.contains("is-selected"),
+    "deselectCellProduct cell must be selected");
+  assert(!cell.classList.contains("cell-no-text"),
+    "deselectCellProduct cell must contain text");
+  cell.classList.add("cell-no-text");
   toggleCellFrame(cell);  
-  cell.classList.remove('is-selected');
+  cell.classList.remove("is-selected");
 }
 
 function askQuestion(i, j) {
   let delay = 500
-  assert(i && j, 'askQuestion requires nonzero cordinates');
+  assert(i && j, "askQuestion requires nonzero cordinates");
   toggleCellGuide(i, 0);
   setTimeout(toggleCellGuide, delay, 0, 0);
   setTimeout(toggleCellGuide, delay*2, 0, j);
@@ -166,7 +216,7 @@ function askQuestion(i, j) {
 }
 
 function clearQuestion(i, j) {
-  assert(i && j, 'clearQuestion requires nonzero cordinates');
+  assert(i && j, "clearQuestion requires nonzero cordinates");
   deselectCellProduct(i, j);
   toggleCellGuide(0, j);
   toggleCellGuide(0, 0);
@@ -175,19 +225,19 @@ function clearQuestion(i, j) {
 
 function answerQuestion(i, j) {
   let delay = 500
-  assert(i && j, 'answerQuestion requires nonzero cordinates');
+  assert(i && j, "answerQuestion requires nonzero cordinates");
   toggleCellGuide(i, 0);
-  assert(cell.classList.contains('is-selected'),
-    'answerQuestion cell must be selected');
-  assert(!cell.classList.contains('cell-no-text'),
-    'answerQuestion cell must contain text');
+  assert(cell.classList.contains("is-selected"),
+    "answerQuestion cell must be selected");
+  assert(!cell.classList.contains("cell-no-text"),
+    "answerQuestion cell must contain text");
 } 
 
-grid.addEventListener('click', function (event) {
+grid.addEventListener("click", function (event) {
   let clicked = event.target;
-  if (clicked.nodeName === 'SECTION') { return; }
-  if (clicked.id == '0 0') { askQuestion(3, 7); }
-  else if (clicked.id == '3 7') { clearQuestion(3,7); }
+  if (clicked.nodeName === "SECTION") { return; }
+  if (clicked.id == "0 0") { askQuestion(3, 7); }
+  else if (clicked.id == "3 7") { clearQuestion(3,7); }
   else { selectCell(clicked); }
 })
 
