@@ -1,0 +1,132 @@
+/* refactor cell-hiden */
+*,
+*::before,
+*::after 
+{
+  box-sizing: border-box;
+}
+
+body 
+{
+}
+
+.grid 
+{
+  height: 767px;
+  width: 767px;
+  padding: 4px;
+  background: white;
+}
+    
+.cell
+{
+  height: 61px;
+  width: 61px;
+  margin: 4px;
+  padding: 2px;
+  float: left;
+  border-radius: 8px;
+  border-width: 0px;
+  opacity: .33;
+}
+
+.cell-text
+{
+  line-height: 57px;
+  text-align: center;
+  color: white;
+  font-size: 50px;
+  font-family: sans-serif;
+  font-weight: 900;
+}
+
+.cell-font-medium
+{
+  font-size: 35px;
+}
+
+.color-0
+{
+  background-color: #BEC2CB
+  border-color: #BEC2CB
+}
+
+.color-1 
+{
+  background-color: #F8EECA 
+  border-color: #F8EECA 
+}
+
+.color-2
+{
+  background-color: #F5DC9A 
+  border-color: #F5DC9A 
+}
+
+.color-3 
+{
+  background-color: #8EB155 
+  border-color: #8EB155 
+}
+
+.color-4 
+{
+  background-color: #497367 
+  border-color: #497367 
+}
+
+.color-5 
+{
+  background-color: #2B3F00 
+  border-color: #2B3F00 
+}
+
+.color-6 
+{
+  background-color: #764000 
+  border-color: #764000 
+}
+
+.color-7 
+{
+  background-color: #E19E57 
+  border-color: #E19E57 
+}
+
+.color-8 
+{
+  background-color: #010570 
+  border-color: #010570 
+}
+
+.color-9 
+{
+  background-color: #3266B2 
+  border-color: #3266B2 
+}
+
+.color-10 
+{
+  background-color: #B8F7FE 
+  border-color: #B8F7FE 
+}
+
+.background-color-white
+{
+  background-color: white !important;
+}
+
+.cell-border-width-thin
+{
+  border-width: 8px;
+}
+
+.cell-border-width-thick
+{
+  border-width: 20px;
+}
+
+.opacity-full 
+{
+  opacity: 1
+}

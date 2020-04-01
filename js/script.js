@@ -1,3 +1,4 @@
+// ask question refactor
 // keyboard input
 // keypad widget
 
@@ -13,91 +14,64 @@ function assert(condition, message)
 
 //// cell functions ////
 
-const cellClassListObject =
-{ "cell-clear" : ["background-color-white"],
-  "cell-thin"  : ["background-color-white", "cell-border-width-thin"],
-  "cell-thick" : ["background-color-white", "cell-border-width-thick"],
-  "cell-fill"  : [],
-  "cell-text"  : ["cell-text"],
-};
-
-function addCellClassList(cell, name)
-{ 
-  cellClassListObject[name].forEach(function(item)
-  { cell.classList.add(item);
-  });
-}
-
-function removeCellClassList(cell, name)
-{ 
-  cellClassListObject[name].forEach(function(item)
-  { cell.classList.remove(item);
-  });
-}
-
-
 const gridSize = 11;
 
-const cellTextArray = Array(gridSize).fill().map(() => Array(gridSize));
+function resetCellText(cell) {
+  cell.textContent = cell.dataset.text
+}
 
-cellTextArray[0][0] = "\u00D7";
-
-for (let i = 1; i < gridSize; ++i)
-{ cellTextArray[i][0] = i.toString();
-};
-
-for (let j = 1; j < gridSize; ++j)
-{ cellTextArray[0][j] = j.toString();
-};
-
-for (let i = 1; i < gridSize; ++i)
-{ for (let j = 1; j < gridSize; ++j)
-  { cellTextArray[i][j] = (i*j).toString();
-  }
-};
-
-function getCellText(i, j)
-{
-  return cellTextArray[i][j];
+function addCellText(cell, text) {
+  cell.textContent += text;
 }
 
 
-function getCellClassColor(i)
-{
-  return "color-" + i.toString();
-}
+const cellScoreArray = Array(gridSize).fill().map(() => 
+                       Array(gridSize).fill(0));
 
-const cellScoreArray = Array(gridSize).fill().map(() => Array(gridSize).fill(0));
-
-function getCellScore(i, j)
-{ return cellScoreArray[i][j];
+function getCellScore(i, j) { 
+  return cellScoreArray[i][j];
 }
   
-function incrementCellFactorScore(i, j) 
-{
+function incrementCellFactorScore(i, j) {
   scoreArray[i][j] += 1;
 }
 
-function incrementCellProductScore(i, j) 
-{
-  if (scoreArray[i][j] < 3) 
-  { scoreArray[i][j] += 1; 
-  }
+function incrementCellProductScore(i, j) {
+  if (scoreArray[i][j] < 3) { scoreArray[i][j] += 1; }
 }
 
 
-const cellProductNameArray = 
-[ "cell-clear", "cell-thin", "cell-thick", "cell-fill"
-];
+const cellClassTypeArray = ["clear", "thin", "thick", "filled", "text"];
 
-function getCellProductName(score)
-{ 
-  return (score < 4) cellProductNameArray[score] : cellProductNameArray[3];
+function getCellClassTypeByScore(score) { 
+  return (score < 4) ? cellClassTypeArray[score] : cellClassTypeArray[3];
 }
 
 
-function getCellId(i, j) 
-{
+function getCellClassType(cellType, row) {
+  return "cell-" + cellType + "-" + row
+}
+
+function changeCellClassType(cell, cellTypeOld, cellTypeNew) {
+  cell.classList.remove(getCellClassType(cellTypeOld, cell.dataset.row));
+  cell.classList.add(getCellClassType(cellTypeNew, cell.dataset.row));
+}
+
+
+function toggleCellSelection(cell) {
+  return cell.classList.toggle("opacity-1");
+}
+
+function addCellSelection(cell) {
+  return cell.classList.add("opacity-1");
+}
+
+function removeCellSelection(cell) {
+  return cell.classList.remove("opacity-1");
+}
+
+
+function getCellId(i, j) {
   return i.toString() + " " + j.toString();
 }
 
@@ -113,105 +87,61 @@ const grid = document.createElement("section");
 grid.setAttribute("class", "grid");
 game.appendChild(grid);
 
-for (let i = 0; i < gridSize; i++) 
-{ for (let j = 0; j < gridSize; j++) 
-{   const cell = document.createElement("div");
-    cell.classList.add("cell");
-    cell.id = getCellId(i, j);
-    cell.textContent = getCellText(i, j);
-    cell.classList.add(getCellClassColor(i));
-    if (i && j) 
-    { addCellClassList(cell, "cell-clear");
+for (let i = 0; i < gridSize; i++) { 
+  for (let j = 0; j < gridSize; j++) {
+    const cell = document.createElement("div");
+    if (i && j) {
+      cell.classList.add(getCellClassType("clear", i));
+      cell.dataset.classtype = "clear";
+      cell.dataset.text = (i*j).toString(); 
     }
-    else
-    { addCellClassList(cell, "cell-fill");
-    } 
+    else {
+      cell.classList.add(getCellClassType("filled", i));
+      cell.dataset.classtype = "filled";
+      if (i) { cell.dataset.text = (i).toString(); }
+      else if (j) { cell.dataset.text = (j).toString(); }
+      else { cell.dataset.text = "\u00D7" }
+    }
+    cell.dataset.row = i.toString();
+    cell.id = getCellId(i, j);
     grid.appendChild(cell);
   }
 };
 
 getCell(10, 10).classList.add("cell-font-medium");
 
-function getScore(cell) {
-  let [row, col] = cell.id.split(" ");
-  row = parseInt(row);
-  col = parseInt(col);
-  return scoreArray[row][col];
-} 
+//// selection ////
 
-function increaseScoreCell(cell) {
-  let [row, col] = cell.id.split(" ");
-  row = parseInt(row);
-  col = parseInt(col);
-  score = scoreArray[row][col];
-  if (score < 3 || cell.classList.contains("cell-guide")) {
-    scoreArray[row][col]++;
+function toggleCellFactor(i, j) {
+  let cell = getCell(i, j);
+  if (toggleCellSelection(cell)) {
+    changeCellClassType(cell, "clear", "text");
+    resetCellText(cell);
   }
-}
-
-function toggleCellFrame(cell) {
-  cell.classList.toggle(frameArray[getScore(cell)]);
-}
-
-function selectCell(cell) {
-  if (cell.classList.contains("cell-guide")) {
-    if (cell.classList.toggle("is-selected")) {
-      cell.classList.toggle("cell-no-text");
-      increaseScoreCell(cell);
-    } 
-    else { cell.classList.add("cell-no-text"); }
-  } 
-  else if (cell.classList.contains("cell-no-text")) {
-    if (cell.classList.contains("is-selected")) {
-      cell.classList.remove("cell-no-text");
-    } 
-    else {
-      cell.classList.remove(frameArray[getScore(cell)]);    
-      cell.classList.add("is-selected");
-    } 
-  }
-  else {
-    increaseScoreCell(cell);
-    cell.classList.add(frameArray[getScore(cell)]);
-    cell.classList.add("cell-no-text");
-    cell.classList.remove("is-selected");
-  }
-}
-
-function toggleCellGuide(i, j) {
-  assert(i == 0 || j == 0, "selectCellGuide requires nonzero int pair");
-  let cell = getCellByRowCol(i, j);
-  if (cell.classList.toggle("cell-no-text")) { increaseScoreGuide(i, j); }
-  cell.classList.toggle("is-selected"); 
 } 
 
 function selectCellProduct(i, j) {
-  assert(i || j, "selectCellProduct requires both coordiantes nonzero");
-  let cell = getCellByRowCol(i, j);
-  assert(cell.classList.contains("cell-no-text"),
-    "selectCellProduct cell must have no text");
-  toggleCellFrame(cell);  
-  cell.classList.add("is-selected");
+  let cell = getCell(i, j);
+  changeCellClassType
+  cell.classList.remove(getCellClassTypeByScore(getCellScore(i, j));
+  cell.classList.add
+  addCellSelection(cell);
 }
 
 function deselectCellProduct(i, j) {
-  assert(i || j, "deselectCellProduct requires both coordiantes nonzero");
-  let cell = getCellByRowCol(i, j);
-  assert(cell.classList.contains("is-selected"),
-    "deselectCellProduct cell must be selected");
-  assert(!cell.classList.contains("cell-no-text"),
-    "deselectCellProduct cell must contain text");
-  cell.classList.add("cell-no-text");
-  toggleCellFrame(cell);  
-  cell.classList.remove("is-selected");
+  let cell = getCell(i, j);
+  cell.classList.remove(getCellClassTypeByScore(getCellScore(i, j));
+  removeCellSelection(cell);
 }
+
+//// ask product ////
 
 function askQuestion(i, j) {
   let delay = 500
   assert(i && j, "askQuestion requires nonzero cordinates");
-  toggleCellGuide(i, 0);
-  setTimeout(toggleCellGuide, delay, 0, 0);
-  setTimeout(toggleCellGuide, delay*2, 0, j);
+  toggleCellFactor(i, 0);
+  setTimeout(toggleCellFactor, delay, 0, 0);
+  setTimeout(toggleCellFactor, delay*2, 0, j);
   setTimeout(selectCellProduct, delay*3, i, j);
 }
 
@@ -239,5 +169,4 @@ grid.addEventListener("click", function (event) {
   if (clicked.id == "0 0") { askQuestion(3, 7); }
   else if (clicked.id == "3 7") { clearQuestion(3,7); }
   else { selectCell(clicked); }
-})
-
+});
