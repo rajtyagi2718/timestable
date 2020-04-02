@@ -8,11 +8,30 @@ html {
   box-sizing: inherit;
 }
 
-.grid {
+.app {
   height: 767px;
-  width: 767px;
-  padding: 4px;
+  width: 2000px; /* calcuate exact */
   background: nth($colors, 1);
+}
+
+.grid {
+  postion: absolute;
+  height: 759px;
+  width: 760px;
+  border: solid red 1px;
+  background: nth($colors, 1);
+}
+
+.keypad {
+  postion: absolute;
+  height: 759px;
+  width: 65px; 
+  margin-left: 65px;
+  border: solid red 1px;
+}
+
+.opacity-33 {
+  opacity: .33;
 }
 
 .opacity-1 {
@@ -58,6 +77,7 @@ html {
       background-color: nth($colors, 1);
       border-color: nth($cell-colors, $i); 
       border-width: 8px;
+      border-style: solid;
     }
   }
 }
@@ -69,6 +89,7 @@ html {
       background-color: nth($colors, 1);
       border-color: nth($cell-colors, $i); 
       border-width: 20px;
+      border-style: solid;
     }
   }
 }
