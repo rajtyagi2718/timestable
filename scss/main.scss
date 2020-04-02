@@ -15,19 +15,17 @@ html {
 }
 
 .grid {
-  postion: absolute;
   height: 759px;
-  width: 760px;
-  border: solid red 1px;
+  width: 759px;
+  float: left;
   background: nth($colors, 1);
 }
 
 .keypad {
-  postion: absolute;
   height: 759px;
   width: 65px; 
+  float: left;
   margin-left: 65px;
-  border: solid red 1px;
 }
 
 .opacity-33 {
@@ -40,6 +38,14 @@ html {
 
 .cell-font-medium {
   font-size: 35px;
+}
+
+@mixin background-color-i-list {
+  @for $i from 1 through length($cell-colors) {
+    .background-#($i - 1) {
+      background-color: nth($cell-colors, $i);
+    }
+  }
 }
 
 @mixin cell-filled-i-list {

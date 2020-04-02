@@ -14,19 +14,17 @@ html {
 }
 
 .grid {
-  postion: absolute;
   height: 759px;
-  width: 760px;
-  border: solid red 1px;
+  width: 759px;
+  float: left;
   background: white;
 }
 
 .keypad {
-  postion: absolute;
   height: 759px;
   width: 65px;
+  float: left;
   margin-left: 65px;
-  border: solid red 1px;
 }
 
 .opacity-33 {

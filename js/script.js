@@ -13,6 +13,7 @@ function randrange(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
+
 //// cell functions ////
 
 function setCellText(cell) {
@@ -104,6 +105,10 @@ function getCell(i, j) {
 }
 
 
+//// pad functions ////
+
+
+
 //// app creation ////
 
 const body = document.getElementsByTagName("BODY")[0]
@@ -142,7 +147,7 @@ for (let i = 0; i < gridSize; i++) {
 getCell(10, 10).classList.add("cell-font-medium");
 
 
-//// keypad ////
+//// keypad creation ////
  
 const keypad = document.createElement("section");
 keypad.setAttribute("class", "keypad");
@@ -150,7 +155,7 @@ app.appendChild(keypad);
 
 for (let i = 0; i < gridSize; i++) {
   const cell = document.createElement("div");
-  cell.dataset.row = i.toString();
+  cell.dataset.row = (0).toString();
   cell.id = getCellId(i, 12);
   cell.dataset.classtype = "filled";
   cell.classList.add("opacity-33");
@@ -161,8 +166,7 @@ for (let i = 0; i < gridSize; i++) {
 
 //// selection ////
 
-function toggleCellFactor(i, j) {
-  let cell = getCell(i, j);
+function toggleCell(cell) {
   if (toggleCellSelection(cell)) { 
     changeCellClassType(cell, "text"); 
     setCellText(cell);
@@ -172,6 +176,10 @@ function toggleCellFactor(i, j) {
     changeCellClassType(cell, "filled"); 
   }
 } 
+
+function toggleCellFactor(i, j) {
+  toggleCell(getCell(i, j));
+}
 
 function selectCellProduct(i, j) {
   let cell = getCell(i, j);
@@ -202,6 +210,26 @@ function selectCell(i, j) {
 }
 
 
+//// pad selection ////
+
+function setKeypad() {
+  let cell;
+  for (let i = 0; i < gridSize; i++) {
+    cell = getCell(i, 12);
+    cell.dataset.text = randrange(0, 101); 
+    toggleCell(cell);
+  }
+}
+
+function clearKeypad() {
+  let cell;
+  for (let i = 0; i < gridSize; i++) {
+    cell = getCell(i, 12);
+    toggleCell(cell);
+  }
+}
+
+
 //// ask product ////
 
 function askProduct(i, j) {
@@ -211,6 +239,7 @@ function askProduct(i, j) {
   setTimeout(toggleCellFactor, delay, 0, 0);
   setTimeout(toggleCellFactor, delay*2, 0, j);
   setTimeout(selectCellProduct, delay*3, i, j);
+  setTimeout(setKeypad, delay*4);
 }
 
 function clearQuestion(i, j) {
@@ -219,6 +248,7 @@ function clearQuestion(i, j) {
   incrementCellFactorScore(0, 0);
   incrementCellFactorScore(0, j);
   let delay = 200
+  clearKeypad();
   deselectCellProduct(i, j);
   setTimeout(toggleCellFactor, delay, 0, j);
   setTimeout(toggleCellFactor, delay*2, 0, 0);
