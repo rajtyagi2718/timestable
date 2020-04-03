@@ -22,9 +22,10 @@ html {
 
 .keypad {
   height: 759px;
-  width: 65px;
+  width: 69px;
   float: left;
-  margin-left: 65px;
+  margin-top: 207px;
+  margin-left: 69px;
 }
 
 .opacity-33 {
@@ -40,9 +41,9 @@ html {
 }
 
 .cell-filled-0 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -50,9 +51,9 @@ html {
 }
 
 .cell-filled-1 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -60,9 +61,9 @@ html {
 }
 
 .cell-filled-2 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -70,9 +71,9 @@ html {
 }
 
 .cell-filled-3 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -80,9 +81,9 @@ html {
 }
 
 .cell-filled-4 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -90,9 +91,9 @@ html {
 }
 
 .cell-filled-5 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -100,9 +101,9 @@ html {
 }
 
 .cell-filled-6 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -110,9 +111,9 @@ html {
 }
 
 .cell-filled-7 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -120,9 +121,9 @@ html {
 }
 
 .cell-filled-8 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -130,9 +131,9 @@ html {
 }
 
 .cell-filled-9 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -140,9 +141,9 @@ html {
 }
 
 .cell-filled-10 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -150,9 +151,9 @@ html {
 }
 
 .cell-text-0 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -166,9 +167,9 @@ html {
 }
 
 .cell-text-1 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -182,9 +183,9 @@ html {
 }
 
 .cell-text-2 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -198,9 +199,9 @@ html {
 }
 
 .cell-text-3 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -214,9 +215,9 @@ html {
 }
 
 .cell-text-4 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -230,9 +231,9 @@ html {
 }
 
 .cell-text-5 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -246,9 +247,9 @@ html {
 }
 
 .cell-text-6 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -262,9 +263,9 @@ html {
 }
 
 .cell-text-7 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -278,9 +279,9 @@ html {
 }
 
 .cell-text-8 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -294,9 +295,9 @@ html {
 }
 
 .cell-text-9 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -310,9 +311,9 @@ html {
 }
 
 .cell-text-10 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -326,9 +327,9 @@ html {
 }
 
 .cell-clear-0 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -336,9 +337,9 @@ html {
 }
 
 .cell-clear-1 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -346,9 +347,9 @@ html {
 }
 
 .cell-clear-2 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -356,9 +357,9 @@ html {
 }
 
 .cell-clear-3 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -366,9 +367,9 @@ html {
 }
 
 .cell-clear-4 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -376,9 +377,9 @@ html {
 }
 
 .cell-clear-5 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -386,9 +387,9 @@ html {
 }
 
 .cell-clear-6 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -396,9 +397,9 @@ html {
 }
 
 .cell-clear-7 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -406,9 +407,9 @@ html {
 }
 
 .cell-clear-8 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -416,9 +417,9 @@ html {
 }
 
 .cell-clear-9 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -426,9 +427,9 @@ html {
 }
 
 .cell-clear-10 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -436,9 +437,9 @@ html {
 }
 
 .cell-thin-0 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -449,9 +450,9 @@ html {
 }
 
 .cell-thin-1 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -462,9 +463,9 @@ html {
 }
 
 .cell-thin-2 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -475,9 +476,9 @@ html {
 }
 
 .cell-thin-3 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -488,9 +489,9 @@ html {
 }
 
 .cell-thin-4 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -501,9 +502,9 @@ html {
 }
 
 .cell-thin-5 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -514,9 +515,9 @@ html {
 }
 
 .cell-thin-6 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -527,9 +528,9 @@ html {
 }
 
 .cell-thin-7 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -540,9 +541,9 @@ html {
 }
 
 .cell-thin-8 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -553,9 +554,9 @@ html {
 }
 
 .cell-thin-9 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -566,9 +567,9 @@ html {
 }
 
 .cell-thin-10 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -579,9 +580,9 @@ html {
 }
 
 .cell-thick-0 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -592,9 +593,9 @@ html {
 }
 
 .cell-thick-1 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -605,9 +606,9 @@ html {
 }
 
 .cell-thick-2 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -618,9 +619,9 @@ html {
 }
 
 .cell-thick-3 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -631,9 +632,9 @@ html {
 }
 
 .cell-thick-4 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -644,9 +645,9 @@ html {
 }
 
 .cell-thick-5 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -657,9 +658,9 @@ html {
 }
 
 .cell-thick-6 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -670,9 +671,9 @@ html {
 }
 
 .cell-thick-7 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -683,9 +684,9 @@ html {
 }
 
 .cell-thick-8 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -696,9 +697,9 @@ html {
 }
 
 .cell-thick-9 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;
@@ -709,9 +710,9 @@ html {
 }
 
 .cell-thick-10 {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;

@@ -5,9 +5,9 @@ $cell-colors: #BEC2CB, #F8EECA, #F5DC9A, #8EB155, #497367,
 $colors: white;
 
 @mixin cell-box {
-  height: 61px;
-  width: 61px;
-  margin: 4px;
+  height: 65px;
+  width: 65px;
+  margin: 2px;
   padding: 2px;
   float: left;
   border-radius: 8px;

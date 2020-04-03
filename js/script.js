@@ -13,6 +13,19 @@ function randrange(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
+function shuffle(lst) {
+  let i, j, item;
+  for (i = lst.length - 1; i > 0; i--) {
+    j = Math.floor(Math.random() * (i+1));
+    item = lst[i];
+    lst[i] = lst[j];
+    lst[j] = item;
+  }
+}
+
+function sortNumber(x, y) {
+  return x - y;
+}
 
 //// cell functions ////
 
@@ -66,7 +79,6 @@ function removeCellClassType(cell) {
 
 function setCellClassTypeByScore(cell, i, j) {
   let score = getCellScore(i, j);
-  console.log("cell ", i, j, score);
   cell.dataset.classtype = getCellClassTypeByScore(score);
   setCellClassType(cell);
 }
@@ -153,7 +165,7 @@ const keypad = document.createElement("section");
 keypad.setAttribute("class", "keypad");
 app.appendChild(keypad);
 
-for (let i = 0; i < gridSize; i++) {
+for (let i = 0; i < 5; i++) {
   const cell = document.createElement("div");
   cell.dataset.row = (0).toString();
   cell.id = getCellId(i, 12);
@@ -212,20 +224,44 @@ function selectCell(i, j) {
 
 //// pad selection ////
 
-function setKeypad() {
-  let cell;
-  for (let i = 0; i < gridSize; i++) {
-    cell = getCell(i, 12);
-    cell.dataset.text = randrange(0, 101); 
-    toggleCell(cell);
+const keypadTextArray = Array(gridSize-1).fill().map(()  => Array(gridSize-1));
+
+for (let i = 1; i < gridSize; i++) {
+  for (let j = 1; j < gridSize; j++) {
+    keypadTextArray[i-1][j-1] = i*j;
+  }
+};
+
+function getRandomKeypadText(i) {
+  return keypadTextArray[i][randrange(0, 10)];
+}
+
+const keypadCells = keypad.children;
+const curKeypadSet = new Set();
+const curKeypadArray = Array();
+
+function setKeypad(i, j) {
+  curKeypadSet.add(keypadTextArray[i-1][j-1]);
+  while (curKeypadSet.size < 3) {
+    curKeypadSet.add(keypadTextArray[i-1][randrange(0, 10)]);
+  }
+  while (curKeypadSet.size < 5) {
+    curKeypadSet.add(keypadTextArray[j-1][randrange(0, 10)]);
+  }
+  curKeypadSet.forEach(v => curKeypadArray.push(v));
+  curKeypadSet.clear();
+  curKeypadArray.sort(sortNumber);
+  curKeypadArray.reverse();
+    
+  for (let i = 0; i < 5; i++) {
+    keypadCells[i].dataset.text = curKeypadArray.pop(); 
+    toggleCell(keypadCells[i]);
   }
 }
 
 function clearKeypad() {
-  let cell;
-  for (let i = 0; i < gridSize; i++) {
-    cell = getCell(i, 12);
-    toggleCell(cell);
+  for (let i = 0; i < 5; i++) {
+    toggleCell(keypadCells[i]);
   }
 }
 
@@ -234,12 +270,12 @@ function clearKeypad() {
 
 function askProduct(i, j) {
   assert(i && j, "askQuestion requires nonzero cordinates");
-  let delay = 400
+  let delay = 400;
   toggleCellFactor(i, 0);
   setTimeout(toggleCellFactor, delay, 0, 0);
   setTimeout(toggleCellFactor, delay*2, 0, j);
   setTimeout(selectCellProduct, delay*3, i, j);
-  setTimeout(setKeypad, delay*4);
+  setTimeout(setKeypad, delay*4, i, j);
 }
 
 function clearQuestion(i, j) {
@@ -247,7 +283,7 @@ function clearQuestion(i, j) {
   incrementCellFactorScore(i, 0);
   incrementCellFactorScore(0, 0);
   incrementCellFactorScore(0, j);
-  let delay = 200
+  let delay = 200;
   clearKeypad();
   deselectCellProduct(i, j);
   setTimeout(toggleCellFactor, delay, 0, j);
@@ -263,7 +299,16 @@ function checkProduct(i, j) {
 
 //// event listener ////
 
-var i, j;
+// var i, j;
+
+var delay = 2000;
+for (let k = 0; k < 300; k += 3) {
+  i = randrange(1, 11);
+  j = randrange(1, 11);
+  setTimeout(askProduct, delay*k, i, j);
+  setTimeout(checkProduct, delay*(k+1), i, j);
+  setTimeout(clearQuestion, delay*(k+2), i, j);
+};
 
 grid.addEventListener("click", function (event) {
   let clicked = event.target;
