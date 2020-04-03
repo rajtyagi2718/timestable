@@ -40,6 +40,50 @@ html {
   font-size: 35px;
 }
 
+.background-color-0 {
+  background-color: #BEC2CB !important;
+}
+
+.background-color-1 {
+  background-color: #F8EECA !important;
+}
+
+.background-color-2 {
+  background-color: #F5DC9A !important;
+}
+
+.background-color-3 {
+  background-color: #8EB155 !important;
+}
+
+.background-color-4 {
+  background-color: #497367 !important;
+}
+
+.background-color-5 {
+  background-color: #2B3F00 !important;
+}
+
+.background-color-6 {
+  background-color: #764000 !important;
+}
+
+.background-color-7 {
+  background-color: #E19E57 !important;
+}
+
+.background-color-8 {
+  background-color: #010570 !important;
+}
+
+.background-color-9 {
+  background-color: #3266B2 !important;
+}
+
+.background-color-10 {
+  background-color: #B8F7FE !important;
+}
+
 .cell-filled-0 {
   height: 65px;
   width: 65px;

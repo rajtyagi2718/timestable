@@ -1,5 +1,4 @@
-// keyboard input
-// keypad widget
+// keypad input: correct text => grid, show answer on keypad, 100 text
 
 //// js preamble ////
 
@@ -29,7 +28,7 @@ function sortNumber(x, y) {
 
 //// cell functions ////
 
-function setCellText(cell) {
+function setCellTextContent(cell) {
   cell.textContent = cell.dataset.text;
 }
 
@@ -37,7 +36,7 @@ function addCellText(cell, text) {
   cell.textContent += text;
 }
 
-function clearCellText(cell) {
+function clearCellTextContent(cell) {
   cell.textContent = "";
 }
 
@@ -178,20 +177,25 @@ for (let i = 0; i < 5; i++) {
 
 //// selection ////
 
-function toggleCell(cell) {
+function setCellText(cell) {
+  changeCellClassType(cell, "text"); 
+  setCellTextContent(cell);
+}  
+
+function clearCellText(cell) {
+  clearCellTextContent(cell);
+  changeCellClassType(cell, "filled"); 
+}  
+
+function toggleCellFactor(i, j) {
+  let cell = getCell(i, j);
   if (toggleCellSelection(cell)) { 
-    changeCellClassType(cell, "text"); 
     setCellText(cell);
   }
   else { 
     clearCellText(cell);
-    changeCellClassType(cell, "filled"); 
   }
 } 
-
-function toggleCellFactor(i, j) {
-  toggleCell(getCell(i, j));
-}
 
 function selectCellProduct(i, j) {
   let cell = getCell(i, j);
@@ -201,7 +205,7 @@ function selectCellProduct(i, j) {
 
 function deselectCellProduct(i, j) {
   let cell = getCell(i, j);
-  clearCellText(cell);
+  clearCellTextContent(cell);
   changeCellClassTypeByScore(cell, i, j);
   removeCellSelection(cell);
 }
@@ -213,7 +217,7 @@ function inputCellProduct(i, j, text) {
 
 function showCellProduct(i, j) {
   let cell = getCell(i, j);
-  setCellText(cell);
+  setCellTextContent(cell);
 }
 
 function selectCell(i, j) {
@@ -255,13 +259,24 @@ function setKeypad(i, j) {
     
   for (let i = 0; i < 5; i++) {
     keypadCells[i].dataset.text = curKeypadArray.pop(); 
-    toggleCell(keypadCells[i]);
+    setCellText(keypadCells[i]);
   }
 }
 
-function clearKeypad() {
-  for (let i = 0; i < 5; i++) {
-    toggleCell(keypadCells[i]);
+function addColorKey(i, j, key) {
+  key.classList.add("background-color-" + i.toString());
+  console.log(key.classList);
+}
+function removeColorKey(i, j, key) {
+  key.classList.remove("background-color-" + i.toString());
+  console.log(key.classList);
+}
+
+function clearKeypad(i, j) {
+  for (let k = 0; k < 5; k++) {
+    removeColorKey(i, j, keypadCells[k]);
+    removeCellSelection(keypadCells[k]);
+    clearCellText(keypadCells[k]);
   }
 }
 
@@ -284,30 +299,49 @@ function clearQuestion(i, j) {
   incrementCellFactorScore(0, 0);
   incrementCellFactorScore(0, j);
   let delay = 200;
-  clearKeypad();
+  clearKeypad(i, j);
   deselectCellProduct(i, j);
   setTimeout(toggleCellFactor, delay, 0, j);
   setTimeout(toggleCellFactor, delay*2, 0, 0);
   setTimeout(toggleCellFactor, delay*3, i, 0);
 }  
 
-function checkProduct(i, j) {
-  if (true) {
+function checkProduct(i, j, key) {
+  if (getCell(i, j).dataset.text == key.dataset.text) {
     incrementCellProductScore(i, j);
+    return true;
   }
+  return false;
 } 
 
+function getAnswer(i, j) {
+  let key = getKeypadInput();
+  if (checkProduct(i, j, key)) {
+    addColorKey(i, j, key);
+    clearCellText(key);
+    setCellText(getCell(i, j));
+  }
+  addCellSelection(key); 
+}  
+
+
 //// event listener ////
+
+function getKeypadInput() {
+  return keypadCells[randrange(0, 5)];
+}
 
 // var i, j;
 
 var delay = 2000;
-for (let k = 0; k < 300; k += 3) {
+for (let k = 0; k < 400; k += 4) {
   i = randrange(1, 11);
   j = randrange(1, 11);
   setTimeout(askProduct, delay*k, i, j);
-  setTimeout(checkProduct, delay*(k+1), i, j);
-  setTimeout(clearQuestion, delay*(k+2), i, j);
+  for (let m = 1; m < 3; m++) {
+    setTimeout(getAnswer, delay*(k+m), i, j);
+  }
+  setTimeout(clearQuestion, delay*(k+3), i, j);
 };
 
 grid.addEventListener("click", function (event) {
