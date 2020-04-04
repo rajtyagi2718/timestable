@@ -1,4 +1,4 @@
-// keypad input: correct text => grid, show answer on keypad, 100 text
+// keypad input: 100 text, double click bug, oop 
 
 //// js preamble ////
 
@@ -244,6 +244,9 @@ const keypadCells = keypad.children;
 const curKeypadSet = new Set();
 const curKeypadArray = Array();
 
+var questionCleared = false;
+var questionAnswered = false;
+
 function setKeypad(i, j) {
   curKeypadSet.add(keypadTextArray[i-1][j-1]);
   while (curKeypadSet.size < 3) {
@@ -257,19 +260,24 @@ function setKeypad(i, j) {
   curKeypadArray.sort(sortNumber);
   curKeypadArray.reverse();
     
-  for (let i = 0; i < 5; i++) {
-    keypadCells[i].dataset.text = curKeypadArray.pop(); 
-    setCellText(keypadCells[i]);
+  for (let k = 0; k < 5; k++) {
+    keypadCells[k].dataset.text = curKeypadArray.pop(); 
+    setCellText(keypadCells[k]);
+    keypadCells[k].addEventListener(
+      "click", function() { checkAnswer(i, j, event.target) },
+      {once: true}
+    );
   }
+  questionAnswered = false;
+  questionCleared = false;
 }
 
 function addColorKey(i, j, key) {
   key.classList.add("background-color-" + i.toString());
-  console.log(key.classList);
 }
+
 function removeColorKey(i, j, key) {
   key.classList.remove("background-color-" + i.toString());
-  console.log(key.classList);
 }
 
 function clearKeypad(i, j) {
@@ -277,13 +285,17 @@ function clearKeypad(i, j) {
     removeColorKey(i, j, keypadCells[k]);
     removeCellSelection(keypadCells[k]);
     clearCellText(keypadCells[k]);
+    keypadCells[k].removeEventListener("click", function() {
+      checkAnswer(i, j, event.target)
+    });
   }
+  console.log("removed listenters");
 }
 
 
 //// ask product ////
 
-function askProduct(i, j) {
+function askQuestion(i, j) {
   assert(i && j, "askQuestion requires nonzero cordinates");
   let delay = 400;
   toggleCellFactor(i, 0);
@@ -294,6 +306,7 @@ function askProduct(i, j) {
 }
 
 function clearQuestion(i, j) {
+  questionCleared = true;
   assert(i && j, "clearQuestion requires nonzero cordinates");
   incrementCellFactorScore(i, 0);
   incrementCellFactorScore(0, 0);
@@ -306,23 +319,31 @@ function clearQuestion(i, j) {
   setTimeout(toggleCellFactor, delay*3, i, 0);
 }  
 
-function checkProduct(i, j, key) {
+function optionalClearQuestion(i, j) {
+    if (! questionCleared) {
+      clearQuestion(i, j);
+    }
+}
+
+function checkAnswer(i, j, key) {
+  if (questionAnswered) {
+    console.log("question already answered", i, j, key.dataset.text);
+    return null;
+  }
+  addCellSelection(key); 
   if (getCell(i, j).dataset.text == key.dataset.text) {
     incrementCellProductScore(i, j);
-    return true;
-  }
-  return false;
-} 
-
-function getAnswer(i, j) {
-  let key = getKeypadInput();
-  if (checkProduct(i, j, key)) {
     addColorKey(i, j, key);
     clearCellText(key);
     setCellText(getCell(i, j));
+    console.log("correct!", i, j, key.dataset.text);
+    questionAnswered = true;
+    setTimeout(clearQuestion, 1500, i, j);
   }
-  addCellSelection(key); 
-}  
+  else {
+    console.log("incorrect.", i, j, key.dataset.text);
+  }
+} 
 
 
 //// event listener ////
@@ -337,24 +358,6 @@ var delay = 2000;
 for (let k = 0; k < 400; k += 4) {
   i = randrange(1, 11);
   j = randrange(1, 11);
-  setTimeout(askProduct, delay*k, i, j);
-  for (let m = 1; m < 3; m++) {
-    setTimeout(getAnswer, delay*(k+m), i, j);
-  }
-  setTimeout(clearQuestion, delay*(k+3), i, j);
+  setTimeout(askQuestion, delay*k, i, j);
+  setTimeout(optionalClearQuestion, delay*(k+3), i, j);
 };
-
-grid.addEventListener("click", function (event) {
-  let clicked = event.target;
-  if (clicked.nodeName === "SECTION") { return; }
-  if (clicked.id == "0 0") { 
-    i = randrange(1, 11);
-    j = randrange(1, 11);
-    askProduct(i, j); 
-  }
-  else if (clicked.id == getCellId(i, j)) { 
-    checkProduct(i, j);
-    clearQuestion(i, j); 
-  }
-  else { }
-});
