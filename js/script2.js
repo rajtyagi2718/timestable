@@ -16,100 +16,102 @@ app.appendChild(keypad);
 
 // cell constructors //
 
-function Cell(parentElement) {
-  this.element = document.createElement("div");
-  this.setCellBox();
-  parentElement.append(instance.element);
+function Cell(element, row) {
+  this.element = element;
+  this.element.classList.add("cell-box");
+  this.element.classList.add("cell-text");
+  this.element.classList.add("background-color-" + row);
+  this.element.classList.add("opacity-33");
 }
 
-function Factor(row, col, text) {
-  Cell.call(this, grid);
+function CellFilled(element, row, text) {
+  Cell.call(this, element, row);
   this.text = text;
-  this.setFilledBox();
+  this.showCellText();
 }
 
-function FactorRow(row) {
-  Factor.call(this, row, 0, row.toString());
+function FactorRow(element, row) {
+  CellFilled.call(this, element, row.toString(), row.toString());
 }
 
-function FactorCol(col) {
-  Factor.call(this, 0, col, col.toString());
+function FactorCol(element, col) {
+  CellFilled.call(this, element, "0", col.toString());
 }
 
-function Pad() {
-  Cell.call(this, keypad, "filled");
-  this.setFilledBox();
+function Pad(element) {
+  CellFilled.call(this, element, "0", "");
 }
 
-function Product(row, col) {
-  Cell.call(this, grid, "clear");
+function Product(element, row, col) {
+  Cell.call(this, element, row.toString());
   this.text = (row * col).toString();
-  this.setClearBox();
-  this.setBorderColor();
+  this.element.classList.add("border-color-" + row);
+  this.addCellClear();
 }
 
 // cell prototype links //
 
-FactorRow.prototype = Object.create(Cell.prototype)
-FactorCol.prototype = Object.create(Cell.prototype)
-Product.prototype = Object.create(Cell.prototype)
+CellFilled.prototype = Object.create(Cell.prototype);
+FactorRow.prototype = Object.create(CellFilled.prototype);
+FactorCol.prototype = Object.create(CellFilled.prototype);
+Pad.prototype = Object.create(CellFilled.prototype);
+Product.prototype = Object.create(Cell.prototype);
 
-// cell prototype methods //
+// cell prototype methods style //
 
-Cell.prototype.setCellBox = function() {
-  this.element.classList.add("cell-box");
-}
-
-Cell.prototype.setClearBox = function() {
+Cell.prototype.addCellClear = function() {
   this.element.classList.add("background-clear");
 }
 
-Cell.prototype.setThinBox = function() {
-  this.element.classList.add("background-clear");
-  this.element.classList.add("border-color-" + this.row.toString());
+Cell.prototype.addCellThin = function() {
+  this.addCellClear();
+  this.element.classList.add("border-width-thin");
 }
 
-Cell.prototype.setBorderColor = function() {
-  this.element.classList.add("border-color-" + this.row.toString());
+Cell.prototype.addCellThick = function() {
+  this.addCellClear();
+  this.element.classList.add("border-width-thick");
 }
 
-
-
-
-// Initialize constructor functions
-function Hero(name, level) {
-  this.name = name
-  this.level = level
+Cell.prototype.showCellText = function() {
+  this.element.textContent = this.text;
 }
 
-function Warrior(name, level, weapon) {
-  Hero.call(this, name, level)
+// construct grid //
 
-  this.weapon = weapon
-}
+const gridArray = Array(11).fill().map(() => Array(11));
 
-function Healer(name, level, spell) {
-  Hero.call(this, name, level)
+for (let i = 0; i < 11; i++) { 
+  for (let j = 0; j < 11; j++) {
+    const element = document.createElement("div");
+    grid.appendChild(element);
+    gridArray[i][j] = element;
+    if (i && j) {
+      gridArray[i][j] = new Product(element, i, j);
+    }
+    else {
+      if (i) { gridArray[i][j] = new FactorRow(element, i); }
+      else if (j) { gridArray[i][j] = new FactorCol(element, j); }
+      else { gridArray[i][j] = new CellFilled(element, "0", "\u00D7"); }
+    }
+  }
+};
 
-  this.spell = spell
-}
+gridArray[10][10].element.classList.add("cell-font-medium");
 
-// Link prototypes and add prototype methods
-Warrior.prototype = Object.create(Hero.prototype)
-Healer.prototype = Object.create(Hero.prototype)
+// construct keypad //
 
-Hero.prototype.greet = function() {
-  return `${this.name} says hello.`
-}
+const keypadArray = Array(5);
 
-Warrior.prototype.attack = function() {
-  return `${this.name} attacks with the ${this.weapon}.`
-}
-
-Healer.prototype.heal = function() {
-  return `${this.name} casts ${this.spell}.`
-}
-
-// Initialize individual character instances
-const hero1 = new Warrior('Bjorn', 1, 'axe')
-const hero2 = new Healer('Kanin', 1, 'cure')
+for (let i = 0; i < 5; i++) {
+  const element = document.createElement("div");
+  keypad.appendChild(element);
+  gridArray[i][j] = element;
+  const cell = document.createElement("div");
+  cell.dataset.row = (0).toString();
+  cell.id = getCellId(i, 12);
+  cell.dataset.classtype = "filled";
+  cell.classList.add("opacity-33");
+  setCellClassType(cell);
+  keypad.appendChild(cell);
+};

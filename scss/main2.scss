@@ -61,21 +61,21 @@ html {
 }
 
 .background-clear {
-  background-color: nth($colors, 1);
+  background-color: nth($colors, 1) !important;
 }
 
 .border-width-thin {
-  border-width: 8px;
+  border-width: 8px !important;
 }
 
 .border-width-thick {
-  border-width: 20px;
+  border-width: 20px !important;
 }
 
 @mixin background-color-i-list {
   @for $i from 1 through length($cell-colors) {
     .background-color-#{$i - 1} {
-      background-color: nth($cell-colors, $i) !important;
+      background-color: nth($cell-colors, $i);
     }
   }
 }
@@ -85,6 +85,7 @@ html {
     .border-color-#{$i - 1} {
       border-color: nth($cell-colors, $i); 
       border-style: solid;
+      border-width: 0px;
     }
   }
 }
