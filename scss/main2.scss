@@ -1,0 +1,93 @@
+$cell-colors: #BEC2CB, #F8EECA, #F5DC9A, #8EB155, #497367, 
+              #2B3F00, #764000, #E19E57, #010570, #3266B2,
+              #B8F7FE;
+
+$colors: white;
+
+html {
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+.app {
+  height: 767px;
+  width: 2000px; /* calcuate exact */
+  background: nth($colors, 1);
+}
+
+.grid {
+  height: 759px;
+  width: 759px;
+  float: left;
+  background: nth($colors, 1);
+}
+
+.keypad {
+  height: 759px;
+  width: 69px; 
+  float: left;
+  margin-top: 207px;
+  margin-left: 69px;
+}
+
+.cell-box {
+  height: 65px;
+  width: 65px;
+  margin: 2px;
+  padding: 2px;
+  float: left;
+  opacity: .33;
+  border-radius: 8px;
+}
+
+.cell-text {
+  line-height: 57px;
+  text-align: center;
+  color: nth($colors, 1);
+  font-size: 50px;
+  font-family: sans-serif;
+  font-weight: 900;
+}
+
+.opacity-1 {
+  opacity: 1;
+}
+
+.cell-font-medium {
+  font-size: 35px;
+}
+
+.background-clear {
+  background-color: nth($colors, 1);
+}
+
+.border-width-thin {
+  border-width: 8px;
+}
+
+.border-width-thick {
+  border-width: 20px;
+}
+
+@mixin background-color-i-list {
+  @for $i from 1 through length($cell-colors) {
+    .background-color-#{$i - 1} {
+      background-color: nth($cell-colors, $i) !important;
+    }
+  }
+}
+
+@mixin border-color-i-list {
+  @for $i from 1 through length($cell-colors) {
+    .border-color-#{$i - 1} {
+      border-color: nth($cell-colors, $i); 
+      border-style: solid;
+    }
+  }
+}
+
+@include background-color-i-list;
+@include border-color-i-list;
