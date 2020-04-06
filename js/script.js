@@ -306,6 +306,7 @@ function askQuestion(i, j) {
 }
 
 function clearQuestion(i, j) {
+  incrementCellProductScore(i, j);
   questionCleared = true;
   assert(i && j, "clearQuestion requires nonzero cordinates");
   incrementCellFactorScore(i, 0);
