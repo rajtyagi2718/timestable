@@ -60,7 +60,9 @@ html {
   font-size: 35px;
 }
 
-.background-clear {
+.background-clear, 
+.border-width-thin, 
+.border-width-thick {
   background-color: nth($colors, 1) !important;
 }
 
