@@ -1,4 +1,8 @@
-@import "cell_mixins";
+$cell-colors: #BEC2CB, #F8EECA, #F5DC9A, #8EB155, #497367, 
+              #2B3F00, #764000, #E19E57, #010570, #3266B2,
+              #B8F7FE;
+
+$colors: white;
 
 html {
   box-sizing: border-box;
@@ -29,8 +33,23 @@ html {
   margin-left: 69px;
 }
 
-.opacity-33 {
+.cell-box {
+  height: 65px;
+  width: 65px;
+  margin: 2px;
+  padding: 2px;
+  float: left;
   opacity: .33;
+  border-radius: 8px;
+}
+
+.cell-text {
+  line-height: 57px;
+  text-align: center;
+  color: nth($colors, 1);
+  font-size: 50px;
+  font-family: sans-serif;
+  font-weight: 900;
 }
 
 .opacity-1 {
@@ -41,69 +60,37 @@ html {
   font-size: 35px;
 }
 
+.background-clear, 
+.border-width-thin, 
+.border-width-thick {
+  background-color: nth($colors, 1) !important;
+}
+
+.border-width-thin {
+  border-width: 8px !important;
+}
+
+.border-width-thick {
+  border-width: 20px !important;
+}
+
 @mixin background-color-i-list {
   @for $i from 1 through length($cell-colors) {
     .background-color-#{$i - 1} {
-      background-color: nth($cell-colors, $i) !important;
-    }
-  }
-}
-
-@mixin cell-filled-i-list {
-  @for $i from 1 through length($cell-colors) {
-    .cell-filled-#{$i - 1} {
-      @include cell-box;
       background-color: nth($cell-colors, $i);
     }
   }
 }
 
-@mixin cell-text-i-list {
+@mixin border-color-i-list {
   @for $i from 1 through length($cell-colors) {
-    .cell-text-#{$i - 1} {
-      @include cell-box;
-      background-color: nth($cell-colors, $i);
-      @include cell-text;
-    }
-  }
-}
-
-@mixin cell-clear-i-list {
-  @for $i from 1 through length($cell-colors) {
-    .cell-clear-#{$i - 1} {
-      @include cell-box;
-      background-color: nth($colors, 1);
-    }
-  }
-}
-  
-@mixin cell-thin-i-list {
-  @for $i from 1 through length($cell-colors) {
-    .cell-thin-#{$i - 1} {
-      @include cell-box;
-      background-color: nth($colors, 1);
+    .border-color-#{$i - 1} {
       border-color: nth($cell-colors, $i); 
-      border-width: 8px;
       border-style: solid;
-    }
-  }
-}
-
-@mixin cell-thick-i-list {
-  @for $i from 1 through length($cell-colors) {
-    .cell-thick-#{$i - 1} {
-      @include cell-box;
-      background-color: nth($colors, 1);
-      border-color: nth($cell-colors, $i); 
-      border-width: 20px;
-      border-style: solid;
+      border-width: 0px;
     }
   }
 }
 
 @include background-color-i-list;
-@include cell-filled-i-list;
-@include cell-text-i-list;
-@include cell-clear-i-list;
-@include cell-thin-i-list;
-@include cell-thick-i-list;
+@include border-color-i-list;

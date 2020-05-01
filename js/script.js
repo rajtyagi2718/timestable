@@ -1,5 +1,3 @@
-// keypad input: 100 text, double click bug, oop 
-
 //// js preamble ////
 
 function assert(condition, message) {
@@ -12,6 +10,10 @@ function randrange(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
+function randbool() {
+  return (Math.random() < .5);
+}
+
 function shuffle(lst) {
   let i, j, item;
   for (i = lst.length - 1; i > 0; i--) {
@@ -22,343 +24,412 @@ function shuffle(lst) {
   }
 }
 
-function sortNumber(x, y) {
-  return x - y;
+function sortReverseNumber(x, y) {
+  return y - x;
 }
 
-//// cell functions ////
 
-function setCellTextContent(cell) {
-  cell.textContent = cell.dataset.text;
+// cell section constructor //
+
+function CellSection(parent, name, array) {
+  this.element = document.createElement("section");
+  this.element.setAttribute("class", name);
+  parent.appendChild(this.element);
+  this.cellArray = array;
 }
 
-function addCellText(cell, text) {
-  cell.textContent += text;
+
+// grid constructor //
+
+function Grid(parent) {
+  CellSection.call(this, parent, "grid", Array(11).fill().map(() => Array(11)));
+  for (let i = 0; i < 11; i++) { 
+    for (let j = 0; j < 11; j++) {
+      let element = document.createElement("div");
+      this.element.appendChild(element);
+      if (i && j) { this.cellArray[i][j] = new Product(element, i, j); }
+      else {
+        if (i) { this.cellArray[i][j] = new FactorRow(element, i); }
+        else if (j) { this.cellArray[i][j] = new FactorCol(element, j); }
+        else { this.cellArray[i][j] = new Factor(element, "0", "\u00D7"); }
+      }
+    }
+  };
+  this.get(10, 10).addMediumFont();
 }
 
-function clearCellTextContent(cell) {
-  cell.textContent = "";
+// grid prototype link //
+
+Grid.prototype = Object.create(CellSection.prototype);
+
+// grid methods //
+
+Grid.prototype.get = function(i, j) {
+  return this.cellArray[i][j];
 }
 
-const gridSize = 11;
+Grid.prototype.select = function(i, j) {
+  this.get(i, j).select();
+}
 
-const cellScoreArray = Array(gridSize).fill().map(() => 
-                       Array(gridSize).fill(0));
+Grid.prototype.deselect = function(i, j, score) {
+  this.get(i, j).deselect(score);
+}
 
-function getCellScore(i, j) { 
-  return cellScoreArray[i][j];
+Grid.prototype.show = function(i, j) {
+  this.get(i, j).showText();
+}
+
+
+// cell constructors //
+
+function Cell(element, row, text) {
+  this.element = element;
+  this.element.classList.add("cell-box");
+  this.element.classList.add("cell-text");
+  this.addColor(row);
+  this.element.classList.add("opacity-33");
+  this.text = text;
+}
+
+function Factor(element, row, text) {
+  Cell.call(this, element, row, text);
+}
+
+function FactorRow(element, row) {
+  Factor.call(this, element, row, row.toString());
+}
+
+function FactorCol(element, col) {
+  Factor.call(this, element, 0, col.toString());
+}
+
+function Pad(element) {
+  Cell.call(this, element, 0, "");
+  this.isCorrect = false;
+}
+
+function Product(element, row, col) {
+  Cell.call(this, element, row, (row * col).toString());
+  this.addBorderColor(row);
+  this.gradeStyle = "clear";
+  this.addStyle("clear");
+}
+
+// cell links //
+
+Factor.prototype = Object.create(Cell.prototype);
+FactorRow.prototype = Object.create(Factor.prototype);
+FactorCol.prototype = Object.create(Factor.prototype);
+Product.prototype = Object.create(Cell.prototype);
+Pad.prototype = Object.create(Cell.prototype);
+
+// cell methods //
+
+Cell.prototype.addColor = function(row) {
+  this.element.classList.add("background-color-" + row.toString());
+}
+
+Cell.prototype.removeColor = function(row) {
+  this.element.classList.remove("background-color-" + row.toString());
+}
+
+Cell.prototype.addBorderColor = function(row) {
+  this.element.classList.add("border-color-" + row.toString());
+}
+
+Cell.prototype.styleMap = {
+  "clear"    : "background-clear",
+  "thin"     : "border-width-thin",
+  "thick"    : "border-width-thick",
+  "selected" : "opacity-1",
+};
+
+Cell.prototype.addStyle = function(style) {
+  this.element.classList.add(this.styleMap[style]);
+}
+
+Cell.prototype.removeStyle = function(style) {
+  this.element.classList.remove(this.styleMap[style]);
+}
+
+Cell.prototype.showText = function() {
+  this.element.textContent = this.text;
+}
+
+Cell.prototype.hideText = function() {
+  this.element.textContent = "";
+}
+
+Cell.prototype.addMediumFont = function() {
+  this.element.classList.add("cell-font-medium");
+}
+
+Cell.prototype.removeMediumFont = function() {
+    this.element.classList.remove("cell-font-medium");
+}
+
+// factor methods //
+
+Factor.prototype.select = function() {
+  this.showText();
+  this.addStyle("selected");
+}
+
+Factor.prototype.deselect = function() {
+  this.hideText();
+  this.removeStyle("selected");
+}
+
+// product methods //
+
+Product.prototype.select = function() {
+  this.removeStyle(this.gradeStyle);
+  this.addStyle("selected");
+}
+
+Product.prototype.deselect = function(score) {
+  this.hideText();
+  this.removeStyle("selected");
+  this.gradeStyle = this.gradeStyleMap[score];
+  this.addStyle(this.gradeStyle);
+}
+
+Product.prototype.gradeStyleMap = {
+  0 : "clear",
+  1 : "thin" ,
+  2 : "thick",
+  3 : "selected",
+};
+
+// pad methods //
+
+Pad.prototype.set = function(text, isCorrect) {
+  this.text = text;
+  if (text == "100") {
+    this.addMediumFont(); 
+  }
+  this.showText();
+  this.isCorrect = isCorrect;
+}
+
+Pad.prototype.select = function(row) {
+  if (this.isCorrect) {
+    this.addColor(row);
+    this.hideText();
+  }
+  this.addStyle("selected");
+}
+
+Pad.prototype.deselect = function(row) {
+  if (this.text == "100") {
+    this.removeMediumFont(); 
+  }
+  if (this.isCorrect) {
+    this.removeColor(row);
+    this.isCorrect = false;
+  }
+  else {
+    this.hideText();
+  } 
+  this.removeStyle("selected");
+}
+
+
+// keypad constructor // 
+
+function Keypad(parent) {
+  CellSection.call(this, parent, "keypad", Array(5)); 
+  for (let k = 0; k < 5; k++) {
+    let element = document.createElement("div");
+    this.element.appendChild(element);
+    this.cellArray[k] = new Pad(element);
+  }
+
+  this.textSet = new Set();
+  this.textArray = Array();
+  this.textGrid = Array(11).fill().map(()  => Array(11));
+  for (let i = 1; i < 11; i++) {
+    for (let j = 1; j < 11; j++) {
+      this.textGrid[i][j] = i*j;
+    }
+  }
+}
+
+// keypad link //
+
+Keypad.prototype = Object.create(CellSection.prototype);
+
+// keypad methods //
+
+Keypad.prototype.get = function(k) {
+  return this.cellArray[k];
+}
+
+Keypad.prototype.select = function(k, i) {
+  this.get(k).select(i);
+}
+
+Keypad.prototype.deselect = function(k, i) {
+  this.get(k).deselect(i);
+}
+
+Keypad.prototype.set = function(i, j) {
+  let answer = this.textGrid[i][j];
+  this.textSet.add(answer);
+  while (this.textSet.size < 5) {
+    if (randbool()) { 
+      this.textSet.add(this.textGrid[i][randrange(1, 11)]);
+    }
+    else {
+      this.textSet.add(this.textGrid[j][randrange(1, 11)]);
+    }
+  }
+  this.textSet.forEach(v => this.textArray.push(v));
+  this.textSet.clear();
+  this.textArray.sort(sortReverseNumber);
+
+  for (let k = 0; k < 5; k++) {
+    let text = this.textArray.pop();
+    let isCorrect = (text == answer);
+    this.cellArray[k].set(text, isCorrect);
+  }
+}
+    
+Keypad.prototype.listen = function(quiz) {
+  for (let k = 0; k < 5; k++) {
+    this.cellArray[k].element.addEventListener(
+      "click", function() { quiz.checkAnswer(k); }, {}
+    );
+  }
+}
+
+Keypad.prototype.clear = function(i) {
+  console.log("clearPad var:", i);
+  for (let k = 0; k < 5; k++) {
+    this.get(k).deselect(i);
+  }
+}  
+
+Keypad.prototype.isCorrect = function(k) {
+  return this.get(k).isCorrect;
+}
+
+
+// product score //
+
+function ProductScore() {
+  this.scoreArray = Array(11).fill().map(() => Array(11).fill(0));
 }
   
-function incrementCellFactorScore(i, j) {
-  cellScoreArray[i][j] += 1;
+ProductScore.prototype.get = function(i, j) {
+  return this.scoreArray[i][j];
 }
 
-function incrementCellProductScore(i, j) {
-  if (cellScoreArray[i][j] < 3) { cellScoreArray[i][j] += 1; }
+ProductScore.prototype.increment = function(i, j) {
+  this.scoreArray[i][j] += 1;
 }
 
-
-const cellClassTypeArray = ["clear", "thin", "thick", "filled", "text"];
-
-function getCellClassTypeByScore(score) { 
-  return (score < 4) ? cellClassTypeArray[score] : cellClassTypeArray[3];
+ProductScore.prototype.decrement = function(i, j) {
+  this.scoreArray[i][j] += 1;
 }
 
-function getCellClassType(cell) {
-  return "cell-" + cell.dataset.classtype + "-" + cell.dataset.row; 
-}
-
-function setCellClassType(cell) {
-  cell.classList.add(getCellClassType(cell));
-}
-
-function removeCellClassType(cell) {
-  cell.classList.remove(getCellClassType(cell));
-}
-
-function setCellClassTypeByScore(cell, i, j) {
-  let score = getCellScore(i, j);
-  cell.dataset.classtype = getCellClassTypeByScore(score);
-  setCellClassType(cell);
-}
-
-function changeCellClassType(cell, cellTypeNew) {
-  removeCellClassType(cell);
-  cell.dataset.classtype = cellTypeNew;
-  setCellClassType(cell);
-}
-
-function changeCellClassTypeByScore(cell, i, j) {
-  removeCellClassType(cell);
-  setCellClassTypeByScore(cell, i, j);
+ProductScore.prototype.clear = function(i, j) {
+  this.scoreArray[i][j] = 0;
 }
 
 
-function toggleCellSelection(cell) {
-  return cell.classList.toggle("opacity-1");
+// quiz constructor //
+
+function Quiz(grid, keypad, productScore) {
+  this.grid = grid;
+  this.keypad = keypad;
+  this.keypad.listen(this);
+  this.productScore = productScore;
+  this.row = 0;
+  this.col = 0;
+  this.questionAnswered = true;
+  this.numQuestions = 0;
 }
 
-function addCellSelection(cell) {
-  return cell.classList.add("opacity-1");
+// quiz methods //
+
+Quiz.prototype.selectQuestion = function() {
+  this.row = randrange(1, 11);
+  this.col = randrange(1, 11);
+}
+  
+Quiz.prototype.askQuestion = function() {
+  let delay = 500;
+  this.grid.select(this.row, 0);
+  setTimeout(() => {this.grid.select(0, 0);}, delay);
+  setTimeout(() => {this.grid.select(0, this.col);}, delay*2);
+  setTimeout(() => {this.grid.select(this.row, this.col);}, delay*3);
+  setTimeout(() => {this.keypad.set(this.row, this.col);}, delay*4);
+  setTimeout(() => {this.questionAnswered = false;}, delay*4);
 }
 
-function removeCellSelection(cell) {
-  return cell.classList.remove("opacity-1");
+Quiz.prototype.checkAnswer = function(k) {
+  if (this.questionAnswered) {
+    return null;
+  }
+  this.keypad.select(k, this.row); 
+  if (this.keypad.isCorrect(k)) {
+    this.productScore.increment(this.row, this.col);
+    console.log("correct!");
+    this.showAnswer(this.row, this.col);
+  }
+  else {
+    console.log("incorrect!");
+  }
+} 
+
+Quiz.prototype.showAnswer = function() {
+  this.questionAnswered = true;
+  this.grid.show(this.row, this.col);
+  console.log("answer ", this.row, " x ", this.col, " = ", this.keypad.textGrid[this.row][this.col]);
+  let delay = 2000;
+  setTimeout(() => {this.clearQuestion();}, delay);
+}
+
+Quiz.prototype.clearQuestion = function() {
+  let delay = 300;
+  grid.deselect(this.row, this.col, this.productScore.get(this.row, this.col));
+  setTimeout(() => {this.grid.deselect(0, this.col);}, delay);
+  setTimeout(() => {this.grid.deselect(0, 0);},        delay*1);
+  setTimeout(() => {this.grid.deselect(this.row, 0);}, delay*2);
+  setTimeout(() => {this.keypad.clear(this.row);},     delay*2);
+  setTimeout(() => {this.quizRandom()},                delay*4);
+}
+
+Quiz.prototype.quizRandom = function() {
+  if (this.numQuestions) {
+    this.numQuestions -= 1;
+    this.selectQuestion();
+    this.askQuestion();
+  }
+}
+
+Quiz.prototype.start = function(numQuestions)  {
+  this.numQuestions = numQuestions;
+  this.quizRandom();
 }
 
 
-function getCellId(i, j) {
-  return i.toString() + " " + j.toString();
-}
+// main //
 
-function getCell(i, j) {
-  return document.getElementById(getCellId(i, j));
-}
+const body = document.getElementsByTagName("BODY")[0];
 
-
-//// pad functions ////
-
-
-
-//// app creation ////
-
-const body = document.getElementsByTagName("BODY")[0]
 const app = document.createElement("section");
 app.setAttribute("class", "app");
 body.append(app);
 
+const grid = new Grid(app);
 
-//// grid creation ////
+const keypad = new Keypad(app);
 
-const grid = document.createElement("section");
-grid.setAttribute("class", "grid");
-app.appendChild(grid);
+const productScore = new ProductScore();
 
-for (let i = 0; i < gridSize; i++) { 
-  for (let j = 0; j < gridSize; j++) {
-    const cell = document.createElement("div");
-    cell.dataset.row = i.toString();
-    cell.id = getCellId(i, j);
-    if (i && j) {
-      cell.dataset.classtype = "clear";
-      cell.dataset.text = (i*j).toString(); 
-    }
-    else {
-      cell.dataset.classtype = "filled";
-      if (i) { cell.dataset.text = (i).toString(); }
-      else if (j) { cell.dataset.text = (j).toString(); }
-      else { cell.dataset.text = "\u00D7" }
-    }
-    cell.classList.add("opacity-33");
-    setCellClassType(cell);
-    grid.appendChild(cell);
-  }
-};
+const quiz = new Quiz(grid, keypad, productScore);
 
-getCell(10, 10).classList.add("cell-font-medium");
-
-
-//// keypad creation ////
- 
-const keypad = document.createElement("section");
-keypad.setAttribute("class", "keypad");
-app.appendChild(keypad);
-
-for (let i = 0; i < 5; i++) {
-  const cell = document.createElement("div");
-  cell.dataset.row = (0).toString();
-  cell.id = getCellId(i, 12);
-  cell.dataset.classtype = "filled";
-  cell.classList.add("opacity-33");
-  setCellClassType(cell);
-  keypad.appendChild(cell);
-};
-
-
-//// selection ////
-
-function setCellText(cell) {
-  changeCellClassType(cell, "text"); 
-  setCellTextContent(cell);
-}  
-
-function clearCellText(cell) {
-  clearCellTextContent(cell);
-  changeCellClassType(cell, "filled"); 
-}  
-
-function toggleCellFactor(i, j) {
-  let cell = getCell(i, j);
-  if (toggleCellSelection(cell)) { 
-    setCellText(cell);
-  }
-  else { 
-    clearCellText(cell);
-  }
-} 
-
-function selectCellProduct(i, j) {
-  let cell = getCell(i, j);
-  changeCellClassType(cell, "text");
-  addCellSelection(cell);
-}
-
-function deselectCellProduct(i, j) {
-  let cell = getCell(i, j);
-  clearCellTextContent(cell);
-  changeCellClassTypeByScore(cell, i, j);
-  removeCellSelection(cell);
-}
-
-function inputCellProduct(i, j, text) {
-  let cell = getCell(i,j);
-  addCellText(cell, text);
-}
-
-function showCellProduct(i, j) {
-  let cell = getCell(i, j);
-  setCellTextContent(cell);
-}
-
-function selectCell(i, j) {
-  if (i & j) { selectCellProduct(i, j); }
-  else { toggleCellFactor(i, j); }
-}
-
-
-//// pad selection ////
-
-const keypadTextArray = Array(gridSize-1).fill().map(()  => Array(gridSize-1));
-
-for (let i = 1; i < gridSize; i++) {
-  for (let j = 1; j < gridSize; j++) {
-    keypadTextArray[i-1][j-1] = i*j;
-  }
-};
-
-function getRandomKeypadText(i) {
-  return keypadTextArray[i][randrange(0, 10)];
-}
-
-const keypadCells = keypad.children;
-const curKeypadSet = new Set();
-const curKeypadArray = Array();
-
-var questionCleared = false;
-var questionAnswered = false;
-
-function setKeypad(i, j) {
-  curKeypadSet.add(keypadTextArray[i-1][j-1]);
-  while (curKeypadSet.size < 3) {
-    curKeypadSet.add(keypadTextArray[i-1][randrange(0, 10)]);
-  }
-  while (curKeypadSet.size < 5) {
-    curKeypadSet.add(keypadTextArray[j-1][randrange(0, 10)]);
-  }
-  curKeypadSet.forEach(v => curKeypadArray.push(v));
-  curKeypadSet.clear();
-  curKeypadArray.sort(sortNumber);
-  curKeypadArray.reverse();
-    
-  for (let k = 0; k < 5; k++) {
-    keypadCells[k].dataset.text = curKeypadArray.pop(); 
-    setCellText(keypadCells[k]);
-    keypadCells[k].addEventListener(
-      "click", function() { checkAnswer(i, j, event.target) },
-      {once: true}
-    );
-  }
-  questionAnswered = false;
-  questionCleared = false;
-}
-
-function addColorKey(i, j, key) {
-  key.classList.add("background-color-" + i.toString());
-}
-
-function removeColorKey(i, j, key) {
-  key.classList.remove("background-color-" + i.toString());
-}
-
-function clearKeypad(i, j) {
-  for (let k = 0; k < 5; k++) {
-    removeColorKey(i, j, keypadCells[k]);
-    removeCellSelection(keypadCells[k]);
-    clearCellText(keypadCells[k]);
-    keypadCells[k].removeEventListener("click", function() {
-      checkAnswer(i, j, event.target)
-    });
-  }
-  console.log("removed listenters");
-}
-
-
-//// ask product ////
-
-function askQuestion(i, j) {
-  assert(i && j, "askQuestion requires nonzero cordinates");
-  let delay = 400;
-  toggleCellFactor(i, 0);
-  setTimeout(toggleCellFactor, delay, 0, 0);
-  setTimeout(toggleCellFactor, delay*2, 0, j);
-  setTimeout(selectCellProduct, delay*3, i, j);
-  setTimeout(setKeypad, delay*4, i, j);
-}
-
-function clearQuestion(i, j) {
-  incrementCellProductScore(i, j);
-  questionCleared = true;
-  assert(i && j, "clearQuestion requires nonzero cordinates");
-  incrementCellFactorScore(i, 0);
-  incrementCellFactorScore(0, 0);
-  incrementCellFactorScore(0, j);
-  let delay = 200;
-  clearKeypad(i, j);
-  deselectCellProduct(i, j);
-  setTimeout(toggleCellFactor, delay, 0, j);
-  setTimeout(toggleCellFactor, delay*2, 0, 0);
-  setTimeout(toggleCellFactor, delay*3, i, 0);
-}  
-
-function optionalClearQuestion(i, j) {
-    if (! questionCleared) {
-      clearQuestion(i, j);
-    }
-}
-
-function checkAnswer(i, j, key) {
-  if (questionAnswered) {
-    console.log("question already answered", i, j, key.dataset.text);
-    return null;
-  }
-  addCellSelection(key); 
-  if (getCell(i, j).dataset.text == key.dataset.text) {
-    incrementCellProductScore(i, j);
-    addColorKey(i, j, key);
-    clearCellText(key);
-    setCellText(getCell(i, j));
-    console.log("correct!", i, j, key.dataset.text);
-    questionAnswered = true;
-    setTimeout(clearQuestion, 1500, i, j);
-  }
-  else {
-    console.log("incorrect.", i, j, key.dataset.text);
-  }
-} 
-
-
-//// event listener ////
-
-function getKeypadInput() {
-  return keypadCells[randrange(0, 5)];
-}
-
-// var i, j;
-
-var delay = 2000;
-for (let k = 0; k < 400; k += 4) {
-  i = randrange(1, 11);
-  j = randrange(1, 11);
-  setTimeout(askQuestion, delay*k, i, j);
-  setTimeout(optionalClearQuestion, delay*(k+3), i, j);
-};
+quiz.start(10);

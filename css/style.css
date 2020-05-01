@@ -28,8 +28,23 @@ html {
   margin-left: 69px;
 }
 
-.opacity-33 {
+.cell-box {
+  height: 65px;
+  width: 65px;
+  margin: 2px;
+  padding: 2px;
+  float: left;
   opacity: 0.33;
+  border-radius: 8px;
+}
+
+.cell-text {
+  line-height: 57px;
+  text-align: center;
+  color: white;
+  font-size: 50px;
+  font-family: sans-serif;
+  font-weight: 900;
 }
 
 .opacity-1 {
@@ -40,730 +55,128 @@ html {
   font-size: 35px;
 }
 
+.background-clear,
+.border-width-thin,
+.border-width-thick {
+  background-color: white !important;
+}
+
+.border-width-thin {
+  border-width: 8px !important;
+}
+
+.border-width-thick {
+  border-width: 20px !important;
+}
+
 .background-color-0 {
-  background-color: #BEC2CB !important;
+  background-color: #BEC2CB;
 }
 
 .background-color-1 {
-  background-color: #F8EECA !important;
+  background-color: #F8EECA;
 }
 
 .background-color-2 {
-  background-color: #F5DC9A !important;
+  background-color: #F5DC9A;
 }
 
 .background-color-3 {
-  background-color: #8EB155 !important;
+  background-color: #8EB155;
 }
 
 .background-color-4 {
-  background-color: #497367 !important;
+  background-color: #497367;
 }
 
 .background-color-5 {
-  background-color: #2B3F00 !important;
+  background-color: #2B3F00;
 }
 
 .background-color-6 {
-  background-color: #764000 !important;
+  background-color: #764000;
 }
 
 .background-color-7 {
-  background-color: #E19E57 !important;
+  background-color: #E19E57;
 }
 
 .background-color-8 {
-  background-color: #010570 !important;
+  background-color: #010570;
 }
 
 .background-color-9 {
-  background-color: #3266B2 !important;
+  background-color: #3266B2;
 }
 
 .background-color-10 {
-  background-color: #B8F7FE !important;
-}
-
-.cell-filled-0 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: #BEC2CB;
-}
-
-.cell-filled-1 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: #F8EECA;
-}
-
-.cell-filled-2 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: #F5DC9A;
-}
-
-.cell-filled-3 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: #8EB155;
-}
-
-.cell-filled-4 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: #497367;
-}
-
-.cell-filled-5 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: #2B3F00;
-}
-
-.cell-filled-6 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: #764000;
-}
-
-.cell-filled-7 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: #E19E57;
-}
-
-.cell-filled-8 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: #010570;
-}
-
-.cell-filled-9 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: #3266B2;
-}
-
-.cell-filled-10 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
   background-color: #B8F7FE;
 }
 
-.cell-text-0 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: #BEC2CB;
-  line-height: 57px;
-  text-align: center;
-  color: white;
-  font-size: 50px;
-  font-family: sans-serif;
-  font-weight: 900;
-}
-
-.cell-text-1 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: #F8EECA;
-  line-height: 57px;
-  text-align: center;
-  color: white;
-  font-size: 50px;
-  font-family: sans-serif;
-  font-weight: 900;
-}
-
-.cell-text-2 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: #F5DC9A;
-  line-height: 57px;
-  text-align: center;
-  color: white;
-  font-size: 50px;
-  font-family: sans-serif;
-  font-weight: 900;
-}
-
-.cell-text-3 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: #8EB155;
-  line-height: 57px;
-  text-align: center;
-  color: white;
-  font-size: 50px;
-  font-family: sans-serif;
-  font-weight: 900;
-}
-
-.cell-text-4 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: #497367;
-  line-height: 57px;
-  text-align: center;
-  color: white;
-  font-size: 50px;
-  font-family: sans-serif;
-  font-weight: 900;
-}
-
-.cell-text-5 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: #2B3F00;
-  line-height: 57px;
-  text-align: center;
-  color: white;
-  font-size: 50px;
-  font-family: sans-serif;
-  font-weight: 900;
-}
-
-.cell-text-6 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: #764000;
-  line-height: 57px;
-  text-align: center;
-  color: white;
-  font-size: 50px;
-  font-family: sans-serif;
-  font-weight: 900;
-}
-
-.cell-text-7 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: #E19E57;
-  line-height: 57px;
-  text-align: center;
-  color: white;
-  font-size: 50px;
-  font-family: sans-serif;
-  font-weight: 900;
-}
-
-.cell-text-8 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: #010570;
-  line-height: 57px;
-  text-align: center;
-  color: white;
-  font-size: 50px;
-  font-family: sans-serif;
-  font-weight: 900;
-}
-
-.cell-text-9 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: #3266B2;
-  line-height: 57px;
-  text-align: center;
-  color: white;
-  font-size: 50px;
-  font-family: sans-serif;
-  font-weight: 900;
-}
-
-.cell-text-10 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: #B8F7FE;
-  line-height: 57px;
-  text-align: center;
-  color: white;
-  font-size: 50px;
-  font-family: sans-serif;
-  font-weight: 900;
-}
-
-.cell-clear-0 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
-}
-
-.cell-clear-1 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
-}
-
-.cell-clear-2 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
-}
-
-.cell-clear-3 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
-}
-
-.cell-clear-4 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
-}
-
-.cell-clear-5 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
-}
-
-.cell-clear-6 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
-}
-
-.cell-clear-7 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
-}
-
-.cell-clear-8 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
-}
-
-.cell-clear-9 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
-}
-
-.cell-clear-10 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
-}
-
-.cell-thin-0 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
+.border-color-0 {
   border-color: #BEC2CB;
-  border-width: 8px;
   border-style: solid;
+  border-width: 0px;
 }
 
-.cell-thin-1 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
+.border-color-1 {
   border-color: #F8EECA;
-  border-width: 8px;
   border-style: solid;
+  border-width: 0px;
 }
 
-.cell-thin-2 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
+.border-color-2 {
   border-color: #F5DC9A;
-  border-width: 8px;
   border-style: solid;
+  border-width: 0px;
 }
 
-.cell-thin-3 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
+.border-color-3 {
   border-color: #8EB155;
-  border-width: 8px;
   border-style: solid;
+  border-width: 0px;
 }
 
-.cell-thin-4 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
+.border-color-4 {
   border-color: #497367;
-  border-width: 8px;
   border-style: solid;
+  border-width: 0px;
 }
 
-.cell-thin-5 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
+.border-color-5 {
   border-color: #2B3F00;
-  border-width: 8px;
   border-style: solid;
+  border-width: 0px;
 }
 
-.cell-thin-6 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
+.border-color-6 {
   border-color: #764000;
-  border-width: 8px;
   border-style: solid;
+  border-width: 0px;
 }
 
-.cell-thin-7 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
+.border-color-7 {
   border-color: #E19E57;
-  border-width: 8px;
   border-style: solid;
+  border-width: 0px;
 }
 
-.cell-thin-8 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
+.border-color-8 {
   border-color: #010570;
-  border-width: 8px;
   border-style: solid;
+  border-width: 0px;
 }
 
-.cell-thin-9 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
+.border-color-9 {
   border-color: #3266B2;
-  border-width: 8px;
   border-style: solid;
+  border-width: 0px;
 }
 
-.cell-thin-10 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
+.border-color-10 {
   border-color: #B8F7FE;
-  border-width: 8px;
   border-style: solid;
+  border-width: 0px;
 }
 
-.cell-thick-0 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
-  border-color: #BEC2CB;
-  border-width: 20px;
-  border-style: solid;
-}
-
-.cell-thick-1 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
-  border-color: #F8EECA;
-  border-width: 20px;
-  border-style: solid;
-}
-
-.cell-thick-2 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
-  border-color: #F5DC9A;
-  border-width: 20px;
-  border-style: solid;
-}
-
-.cell-thick-3 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
-  border-color: #8EB155;
-  border-width: 20px;
-  border-style: solid;
-}
-
-.cell-thick-4 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
-  border-color: #497367;
-  border-width: 20px;
-  border-style: solid;
-}
-
-.cell-thick-5 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
-  border-color: #2B3F00;
-  border-width: 20px;
-  border-style: solid;
-}
-
-.cell-thick-6 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
-  border-color: #764000;
-  border-width: 20px;
-  border-style: solid;
-}
-
-.cell-thick-7 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
-  border-color: #E19E57;
-  border-width: 20px;
-  border-style: solid;
-}
-
-.cell-thick-8 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
-  border-color: #010570;
-  border-width: 20px;
-  border-style: solid;
-}
-
-.cell-thick-9 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
-  border-color: #3266B2;
-  border-width: 20px;
-  border-style: solid;
-}
-
-.cell-thick-10 {
-  height: 65px;
-  width: 65px;
-  margin: 2px;
-  padding: 2px;
-  float: left;
-  border-radius: 8px;
-  background-color: white;
-  border-color: #B8F7FE;
-  border-width: 20px;
-  border-style: solid;
-}
-
-/*# sourceMappingURL=style.css.map */
+/*# sourceMappingURL=style2.css.map */
