@@ -305,7 +305,6 @@ Keypad.prototype.listen = function(quiz) {
 }
 
 Keypad.prototype.clear = function(i) {
-  console.log("clearPad var:", i);
   for (let k = 0; k < 5; k++) {
     this.get(k).deselect(i);
   }
@@ -360,6 +359,7 @@ Quiz.prototype.selectQuestion = function() {
 }
   
 Quiz.prototype.askQuestion = function() {
+  console.log("what is", this.row, "x", this.col, "?");
   let delay = 500;
   this.grid.select(this.row, 0);
   setTimeout(() => {this.grid.select(0, 0);}, delay);
@@ -380,14 +380,14 @@ Quiz.prototype.checkAnswer = function(k) {
     this.showAnswer(this.row, this.col);
   }
   else {
-    console.log("incorrect!");
+    console.log("incorrect.");
   }
 } 
 
 Quiz.prototype.showAnswer = function() {
   this.questionAnswered = true;
   this.grid.show(this.row, this.col);
-  console.log("answer ", this.row, " x ", this.col, " = ", this.keypad.textGrid[this.row][this.col]);
+  console.log("answer:", this.keypad.textGrid[this.row][this.col]);
   let delay = 2000;
   setTimeout(() => {this.clearQuestion();}, delay);
 }
