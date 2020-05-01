@@ -432,4 +432,4 @@ const productScore = new ProductScore();
 
 const quiz = new Quiz(grid, keypad, productScore);
 
-quiz.start(10);
+quiz.start(-1);
