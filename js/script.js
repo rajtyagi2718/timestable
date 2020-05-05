@@ -576,3 +576,5 @@ const keypad = new Keypad(app);
 const productScore = new ProductScore();
 
 const quiz = new Quiz(grid, control, keypad, productScore);
+
+quiz.togglePlay();
