@@ -1,4 +1,4 @@
-//// js preamble ////
+//// preamble ////
 
 function assert(condition, message) {
   if (!condition) { 
@@ -12,6 +12,10 @@ function randrange(min, max) {
 
 function randbool() {
   return (Math.random() < .5);
+}
+
+function randvalue(arr) {
+  return arr[randrange(0, arr.length)];
 }
 
 function shuffle(lst) {
@@ -77,7 +81,26 @@ Grid.prototype.deselect = function(i, j, score) {
 }
 
 Grid.prototype.show = function(i, j) {
-  this.get(i, j).showText();
+  this.get(i, j).show();
+}
+
+Grid.prototype.hide = function(i, j) {
+  this.get(i, j).hide();
+}
+
+Grid.prototype.toggle = function(i, j) {
+  this.get(i, j).toggle();
+}
+
+Grid.prototype.listen = function(quiz) {
+  for (let k = 1; k < 11; k++) {
+    this.get(k, 0).element.addEventListener(
+      "click", () => {quiz.toggleRow(k);}, {}
+    );
+    this.get(0, k).element.addEventListener(
+      "click", () => {quiz.toggleCol(k);}, {}
+    );
+  }
 }
 
 
@@ -94,6 +117,7 @@ function Cell(element, row, text) {
 
 function Factor(element, row, text) {
   Cell.call(this, element, row, text);
+  this.isShown = true;
 }
 
 function FactorRow(element, row) {
@@ -104,16 +128,20 @@ function FactorCol(element, col) {
   Factor.call(this, element, 0, col.toString());
 }
 
-function Pad(element) {
-  Cell.call(this, element, 0, "");
-  this.isCorrect = false;
-}
-
 function Product(element, row, col) {
   Cell.call(this, element, row, (row * col).toString());
   this.addBorderColor(row);
   this.gradeStyle = "clear";
   this.addStyle("clear");
+}
+
+function Pad(element) {
+  Cell.call(this, element, 0, "");
+  this.isCorrect = false;
+}
+
+function Controller(element) {
+  Cell.call(this, element, 0, "=");
 }
 
 // cell links //
@@ -123,6 +151,7 @@ FactorRow.prototype = Object.create(Factor.prototype);
 FactorCol.prototype = Object.create(Factor.prototype);
 Product.prototype = Object.create(Cell.prototype);
 Pad.prototype = Object.create(Cell.prototype);
+Controller.prototype = Object.create(Cell.prototype);
 
 // cell methods //
 
@@ -142,6 +171,7 @@ Cell.prototype.styleMap = {
   "clear"    : "background-clear",
   "thin"     : "border-width-thin",
   "thick"    : "border-width-thick",
+  "filled"   : "opacity-33",
   "selected" : "opacity-1",
 };
 
@@ -169,16 +199,35 @@ Cell.prototype.removeMediumFont = function() {
     this.element.classList.remove("cell-font-medium");
 }
 
-// factor methods //
-
-Factor.prototype.select = function() {
+Cell.prototype.select = function() {
   this.showText();
   this.addStyle("selected");
 }
 
-Factor.prototype.deselect = function() {
+Cell.prototype.deselect = function() {
   this.hideText();
   this.removeStyle("selected");
+}
+
+// factor methods //
+
+Factor.prototype.hide = function() {
+  this.deselect();
+  this.addStyle("clear");
+}
+
+Factor.prototype.show = function() {
+  this.removeStyle("clear");
+}
+
+Factor.prototype.toggle = function() {
+  if (this.isShown) {
+    this.hide();
+  }
+  else {
+    this.show();
+  }
+  this.isShown = !this.isShown;
 }
 
 // product methods //
@@ -199,8 +248,12 @@ Product.prototype.gradeStyleMap = {
   0 : "clear",
   1 : "thin" ,
   2 : "thick",
-  3 : "selected",
+  3 : "filled",
 };
+
+Product.prototype.show = function() {
+  this.showText();
+}
 
 // pad methods //
 
@@ -233,6 +286,39 @@ Pad.prototype.deselect = function(row) {
     this.hideText();
   } 
   this.removeStyle("selected");
+}
+
+// controller methods //
+
+
+// control //
+
+function Control(parent) {
+  CellSection.call(this, parent, "control", Array(1));
+  let element = document.createElement("div");
+  this.element.appendChild(element);
+  this.cellArray[0] = new Controller(element);
+}
+
+Control.prototype = Object.create(CellSection.prototype);
+
+Control.prototype.get = function() {
+  return this.cellArray[0];
+}
+
+Control.prototype.toggle = function(play) {
+  if (play) {
+    this.get().select();
+  }
+  else {
+    this.get().deselect();
+  }
+}
+
+Control.prototype.listen = function(quiz) {
+  this.get().element.addEventListener(
+      "click", () => {quiz.togglePlay();}, {}
+  );
 }
 
 
@@ -277,7 +363,7 @@ Keypad.prototype.deselect = function(k, i) {
 Keypad.prototype.set = function(i, j) {
   let answer = this.textGrid[i][j];
   this.textSet.add(answer);
-  while (this.textSet.size < 5) {
+  while (this.textSet.size < 4) {
     if (randbool()) { 
       this.textSet.add(this.textGrid[i][randrange(1, 11)]);
     }
@@ -285,6 +371,10 @@ Keypad.prototype.set = function(i, j) {
       this.textSet.add(this.textGrid[j][randrange(1, 11)]);
     }
   }
+  while (this.textSet.size < 5) {
+    this.textSet.add(this.textGrid[randrange(1, 11)][randrange(1, 11)]);
+  }
+
   this.textSet.forEach(v => this.textArray.push(v));
   this.textSet.clear();
   this.textArray.sort(sortReverseNumber);
@@ -292,14 +382,14 @@ Keypad.prototype.set = function(i, j) {
   for (let k = 0; k < 5; k++) {
     let text = this.textArray.pop();
     let isCorrect = (text == answer);
-    this.cellArray[k].set(text, isCorrect);
+    this.get(k).set(text, isCorrect);
   }
 }
     
 Keypad.prototype.listen = function(quiz) {
   for (let k = 0; k < 5; k++) {
-    this.cellArray[k].element.addEventListener(
-      "click", function() { quiz.checkAnswer(k); }, {}
+    this.get(k).element.addEventListener(
+      "click", function() {quiz.checkAnswer(k);}, {}
     );
   }
 }
@@ -340,8 +430,11 @@ ProductScore.prototype.clear = function(i, j) {
 
 // quiz constructor //
 
-function Quiz(grid, keypad, productScore) {
+function Quiz(grid, control, keypad, productScore) {
   this.grid = grid;
+  this.grid.listen(this);
+  this.control = control;
+  this.control.listen(this);
   this.keypad = keypad;
   this.keypad.listen(this);
   this.productScore = productScore;
@@ -349,13 +442,23 @@ function Quiz(grid, keypad, productScore) {
   this.col = 0;
   this.questionAnswered = true;
   this.numQuestions = 0;
+  this.rowArr = Array();
+  this.colArr = Array();
+  this.rowSet = new Set();
+  this.colSet = new Set();
+  for (let k = 1; k < 11; k++) {
+    this.rowSet.add(k);
+    this.colSet.add(k);
+  }
+  this.play = false;
 }
 
 // quiz methods //
 
 Quiz.prototype.selectQuestion = function() {
-  this.row = randrange(1, 11);
-  this.col = randrange(1, 11);
+  console.log(this.rowArr, this.colArr);
+  this.row = randvalue(this.rowArr);
+  this.col = randvalue(this.colArr);
 }
   
 Quiz.prototype.askQuestion = function() {
@@ -371,7 +474,7 @@ Quiz.prototype.askQuestion = function() {
 
 Quiz.prototype.checkAnswer = function(k) {
   if (this.questionAnswered) {
-    return null;
+    return;
   }
   this.keypad.select(k, this.row); 
   if (this.keypad.isCorrect(k)) {
@@ -394,25 +497,65 @@ Quiz.prototype.showAnswer = function() {
 
 Quiz.prototype.clearQuestion = function() {
   let delay = 300;
-  grid.deselect(this.row, this.col, this.productScore.get(this.row, this.col));
+  this.grid.deselect(this.row, this.col, this.productScore.get(this.row, this.col));
   setTimeout(() => {this.grid.deselect(0, this.col);}, delay);
   setTimeout(() => {this.grid.deselect(0, 0);},        delay*1);
   setTimeout(() => {this.grid.deselect(this.row, 0);}, delay*2);
   setTimeout(() => {this.keypad.clear(this.row);},     delay*2);
-  setTimeout(() => {this.quizRandom()},                delay*4);
+  setTimeout(() => {this.query();},                delay*4);
 }
 
-Quiz.prototype.quizRandom = function() {
-  if (this.numQuestions) {
+Quiz.prototype.query = function() {
+  if (this.play && this.numQuestions) {
     this.numQuestions -= 1;
     this.selectQuestion();
     this.askQuestion();
   }
 }
 
-Quiz.prototype.start = function(numQuestions)  {
-  this.numQuestions = numQuestions;
-  this.quizRandom();
+Quiz.prototype.start = function(numQuestions=-1) {
+  if (numQuestions) {
+    this.numQuestions = numQuestions;
+  }
+  this.rowArr.length = 0;
+  this.rowSet.forEach(v => this.rowArr.push(v));
+  this.colArr.length = 0;
+  this.colSet.forEach(v => this.colArr.push(v));
+  if (this.rowArr.length && this.colArr.length) {
+    this.query();
+  }
+}
+
+Quiz.prototype.togglePlay = function() {
+  this.play = !this.play;
+  this.control.toggle(this.play);
+  this.start();
+}
+
+Quiz.prototype.toggleRow = function(k) {
+  if (this.play) {
+    return;
+  }
+  this.grid.toggle(k, 0);
+  if (this.rowSet.has(k)) {
+    this.rowSet.delete(k);
+  }
+  else {
+    this.rowSet.add(k);
+  }
+}
+
+Quiz.prototype.toggleCol = function(k) {
+  if (this.play) {
+    return;
+  }
+  this.grid.toggle(0, k);
+  if (this.colSet.has(k)) {
+    this.colSet.delete(k);
+  }
+  else {
+    this.colSet.add(k);
+  }
 }
 
 
@@ -426,10 +569,10 @@ body.append(app);
 
 const grid = new Grid(app);
 
+const control = new Control(app);
+
 const keypad = new Keypad(app);
 
 const productScore = new ProductScore();
 
-const quiz = new Quiz(grid, keypad, productScore);
-
-quiz.start(-1);
+const quiz = new Quiz(grid, control, keypad, productScore);
