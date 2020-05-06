@@ -144,6 +144,14 @@ function Controller(element) {
   Cell.call(this, element, 0, "=");
 }
 
+function Timer(element) {
+  Cell.call(this, element, 0, "");
+  this.showText();
+  this.total = 10;
+  this.start = 0;
+}
+
+
 // cell links //
 
 Factor.prototype = Object.create(Cell.prototype);
@@ -152,6 +160,7 @@ FactorCol.prototype = Object.create(Factor.prototype);
 Product.prototype = Object.create(Cell.prototype);
 Pad.prototype = Object.create(Cell.prototype);
 Controller.prototype = Object.create(Cell.prototype);
+Timer.prototype = Object.create(Cell.prototype);
 
 // cell methods //
 
@@ -189,6 +198,10 @@ Cell.prototype.showText = function() {
 
 Cell.prototype.hideText = function() {
   this.element.textContent = "";
+}
+
+Cell.prototype.changeText = function(text) {
+  this.text = text;
 }
 
 Cell.prototype.addMediumFont = function() {
@@ -258,7 +271,7 @@ Product.prototype.show = function() {
 // pad methods //
 
 Pad.prototype.set = function(text, isCorrect) {
-  this.text = text;
+  this.changeText(text);
   if (text == "100") {
     this.addMediumFont(); 
   }
@@ -282,13 +295,32 @@ Pad.prototype.deselect = function(row) {
     this.removeColor(row);
     this.isCorrect = false;
   }
-  else {
-    this.hideText();
-  } 
+  this.hideText();
   this.removeStyle("selected");
 }
 
-// controller methods //
+Timer.prototype.set = function(total) {
+  this.total = total;
+}
+
+Timer.prototype.reset = function(quiz) {
+  this.start = Date.now();
+  this.changeText(this.total.toString());
+  this.showText();
+  handle = setInterval(() => {
+    count = this.total - this.getElapsed();
+    this.changeText(count.toString());
+    this.showText();
+    if (count == 0) {
+      quiz.showAnswer();
+    }
+  }, 1000);
+  return handle;
+}
+
+Timer.prototype.getElapsed = function() {
+  return Math.floor((Date.now() - this.start) / 1000);
+}
 
 
 // control //
@@ -428,15 +460,47 @@ ProductScore.prototype.clear = function(i, j) {
 }
 
 
+// timer //
+
+function Time(parent) {
+  CellSection.call(this, parent, "time", Array(1));
+  let element = document.createElement("div");
+  this.element.appendChild(element);
+  this.cellArray[0] = new Timer(element);
+}
+
+Time.prototype = Object.create(CellSection.prototype);
+
+Time.prototype.get = function() {
+  return this.cellArray[0];
+}
+
+Time.prototype.reset = function(quiz) {
+  return this.get().reset(quiz);
+}
+
+Time.prototype.pause = function() {
+}
+
+Time.prototype.listen = function(quiz) {
+  this.get().element.addEventListener(
+      "click", () => {quiz.showAnswer();}, {}
+  );
+}
+
+
 // quiz constructor //
 
-function Quiz(grid, control, keypad, productScore) {
+function Quiz(grid, control, keypad, time, productScore) {
   this.grid = grid;
   this.grid.listen(this);
   this.control = control;
   this.control.listen(this);
   this.keypad = keypad;
   this.keypad.listen(this);
+  this.time = time;
+  this.time.listen(this);
+  this.timeHandle = 0;
   this.productScore = productScore;
   this.row = 0;
   this.col = 0;
@@ -456,7 +520,6 @@ function Quiz(grid, control, keypad, productScore) {
 // quiz methods //
 
 Quiz.prototype.selectQuestion = function() {
-  console.log(this.rowArr, this.colArr);
   this.row = randvalue(this.rowArr);
   this.col = randvalue(this.colArr);
 }
@@ -468,8 +531,9 @@ Quiz.prototype.askQuestion = function() {
   setTimeout(() => {this.grid.select(0, 0);}, delay);
   setTimeout(() => {this.grid.select(0, this.col);}, delay*2);
   setTimeout(() => {this.grid.select(this.row, this.col);}, delay*3);
-  setTimeout(() => {this.keypad.set(this.row, this.col);}, delay*4);
-  setTimeout(() => {this.questionAnswered = false;}, delay*4);
+  setTimeout(() => {this.keypad.set(this.row, this.col);
+                    this.timeHandle = this.time.reset(this);
+                    this.questionAnswered = false;}, delay*4);
 }
 
 Quiz.prototype.checkAnswer = function(k) {
@@ -488,7 +552,11 @@ Quiz.prototype.checkAnswer = function(k) {
 } 
 
 Quiz.prototype.showAnswer = function() {
+  if (this.questionAnswered) {
+    return;
+  }
   this.questionAnswered = true;
+  clearInterval(this.timeHandle);
   this.grid.show(this.row, this.col);
   console.log("answer:", this.keypad.textGrid[this.row][this.col]);
   let delay = 2000;
@@ -558,6 +626,13 @@ Quiz.prototype.toggleCol = function(k) {
   }
 }
 
+Quiz.prototype.toggleTime = function() {
+  if (this.play) {
+    return;
+  }
+  // this.time.select()
+}
+
 
 // main //
 
@@ -575,6 +650,8 @@ const keypad = new Keypad(app);
 
 const productScore = new ProductScore();
 
-const quiz = new Quiz(grid, control, keypad, productScore);
+const time = new Time(app);
+
+const quiz = new Quiz(grid, control, keypad, time, productScore);
 
 quiz.togglePlay();

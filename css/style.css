@@ -9,7 +9,6 @@ html {
 .app {
   height: 767px;
   width: 897px;
-  /* calcuate exact */
   background: white;
 }
 
@@ -20,18 +19,20 @@ html {
   background: white;
 }
 
-.control {
-  height: 69px;
-  width: 69px;
-  float: left;
-  margin-left: 69px;
-}
-
 .keypad {
-  height: 690px;
+  height: 345px;
   width: 69px;
   float: left;
   margin-top: 138px;
+  margin-left: 69px;
+  margin-bottom: 138px;
+}
+
+.control,
+.time {
+  height: 69px;
+  width: 69px;
+  float: left;
   margin-left: 69px;
 }
 

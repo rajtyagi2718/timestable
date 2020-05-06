@@ -14,7 +14,7 @@ html {
 
 .app {
   height: 767px;
-  width: 2000px; /* calcuate exact */
+  width: 897px;
   background: nth($colors, 1);
 }
 
@@ -26,10 +26,19 @@ html {
 }
 
 .keypad {
-  height: 759px;
+  height: 345px;
   width: 69px; 
   float: left;
-  margin-top: 207px;
+  margin-top: 138px;
+  margin-left: 69px;
+  margin-bottom: 138px;
+}
+
+.control,
+.time {
+  height: 69px;
+  width: 69px;
+  float: left;
   margin-left: 69px;
 }
 
