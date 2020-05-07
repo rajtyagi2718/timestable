@@ -95,10 +95,10 @@ Grid.prototype.toggle = function(i, j) {
 Grid.prototype.listen = function(quiz) {
   for (let k = 1; k < 11; k++) {
     this.get(k, 0).element.addEventListener(
-      "click", () => {quiz.toggleRow(k);}, {}
+      "click", () => {quiz.toggleGrid(k, 0);}, {}
     );
     this.get(0, k).element.addEventListener(
-      "click", () => {quiz.toggleCol(k);}, {}
+      "click", () => {quiz.toggleGrid(0, k);}, {}
     );
   }
 }
@@ -342,6 +342,18 @@ Timer.prototype.updateRemain = function() {
   this.remain = this.alarm - now.getTime();
 }
   
+Timer.prototype.toggle = function() {
+  this.set(this.nextTotal[this.total]);
+}
+
+Timer.prototype.nextTotal = {
+  10 : 5,
+   5 : 2,
+   2 : 1,
+   1 : 99,
+  99 : 10,
+}; 
+
 
 // control //
 
@@ -358,18 +370,17 @@ Control.prototype.get = function() {
   return this.cellArray[0];
 }
 
-Control.prototype.toggle = function(play) {
-  if (play) {
-    this.get().select();
-  }
-  else {
-    this.get().deselect();
-  }
+Control.prototype.select = function() {
+  this.get().select();
+}
+
+Control.prototype.deselect = function() {
+  this.get().deselect();
 }
 
 Control.prototype.listen = function(quiz) {
   this.get().element.addEventListener(
-      "click", () => {quiz.togglePlay();}, {}
+      "click", () => {quiz.toggleControl();}, {}
   );
 }
 
@@ -441,7 +452,7 @@ Keypad.prototype.set = function(i, j) {
 Keypad.prototype.listen = function(quiz) {
   for (let k = 0; k < 5; k++) {
     this.get(k).element.addEventListener(
-      "click", function() {if (quiz.play) quiz.checkAnswer(k);}, {}
+      "click", function() {quiz.toggleKeypad(k);}, {}
     );
   }
 }
@@ -518,9 +529,13 @@ Time.prototype.stop = function() {
   this.interval = null;
 }
 
+Time.prototype.toggle = function() {
+  this.get().toggle();
+}
+
 Time.prototype.listen = function(quiz) {
   this.get().element.addEventListener(
-      "click", () => {if (quiz.play) quiz.showAnswer();}, {}
+      "click", () => {quiz.toggleTime();}, {}
   );
 }
 
@@ -553,6 +568,8 @@ function Quiz(grid, control, keypad, time, productScore) {
 }
 
 // quiz methods //
+
+// quiz query methods //
 
 Quiz.prototype.selectQuestion = function() {
   this.row = randvalue(this.rowArr);
@@ -629,10 +646,38 @@ Quiz.prototype.start = function(numQuestions=-1) {
   }
 }
 
-Quiz.prototype.togglePlay = function() {
-  this.play = !this.play;
-  this.control.toggle(this.play);
+// quiz toggle methods //
+
+Quiz.prototype.toggleGrid = function(i, j) {
   if (this.play) {
+    return;
+  }
+  this.grid.toggle(i, j);
+  if (i == 0 && j == 0) {
+    // this.multiply = false;
+  }
+  else if (j == 0) {
+    if (this.rowSet.has(i)) {
+      this.rowSet.delete(i);
+    }
+    else {
+      this.rowSet.add(i);
+    }
+  }
+  else {
+    if (this.colSet.has(j)) {
+      this.colSet.delete(j);
+    }
+    else {
+      this.colSet.add(j);
+    }
+  }
+}
+
+Quiz.prototype.toggleControl = function() {
+  this.play = !this.play;
+  if (this.play) {
+    this.control.select();
     if (!this.questionAnswered) {
       this.time.resume(this);
     }
@@ -641,33 +686,23 @@ Quiz.prototype.togglePlay = function() {
     }
   }
   else {
+    this.control.deselect();
     this.time.pause();
   }
 }
 
-Quiz.prototype.toggleRow = function(k) {
+Quiz.prototype.toggleKeypad = function(k) {
   if (this.play) {
-    return;
-  }
-  this.grid.toggle(k, 0);
-  if (this.rowSet.has(k)) {
-    this.rowSet.delete(k);
-  }
-  else {
-    this.rowSet.add(k);
+    this.checkAnswer(k);
   }
 }
 
-Quiz.prototype.toggleCol = function(k) {
+Quiz.prototype.toggleTime = function() {
   if (this.play) {
-    return;
-  }
-  this.grid.toggle(0, k);
-  if (this.colSet.has(k)) {
-    this.colSet.delete(k);
+    this.showAnswer();
   }
   else {
-    this.colSet.add(k);
+    this.time.toggle();
   }
 }
 
@@ -692,4 +727,4 @@ const time = new Time(app);
 
 const quiz = new Quiz(grid, control, keypad, time, productScore);
 
-quiz.togglePlay();
+quiz.toggleControl();
