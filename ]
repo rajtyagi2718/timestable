@@ -12,10 +12,9 @@ html {
   box-sizing: inherit;
 }
 
+  
 
-/* grid containers */  
-
-@mixin app-creator {
+@mixin app-grid-creator {
   $areas: ();
   @for $i from 1 through 11 {
     $nested: "";
@@ -24,14 +23,14 @@ html {
       @if $i == 1 and $j == 1 {
         $chr: "operation";
       }
-      @else if $j == 1 and $i <= 11 {
-        $chr: "factor-row";
-      }
       @else if $i == 1 and $j <= 11 {
-        $chr: "factor-col";
+        $chr: "factor-col-grid";
+      }
+      @else if $j == 1 and $i <= 11 {
+        $chr: "factor-row-grid";
       }
       @else if $i <= 11 and $j <= 11 {
-        $chr: "product";
+        $chr: "product-grid";
       }
       @else if $j == 12 {
         // $chr: "...";
@@ -51,7 +50,7 @@ html {
     $nested: str-slice($nested, 1, -2);
     $areas: append($areas, $nested);
   }
-  .app {
+  .app-grid {
     display: grid;
     height: 759px;
     width: 897px;
@@ -62,62 +61,54 @@ html {
   }
 }
    
-@include app-creator;
+@include app-grid-creator;
 
-.operation {
-  grid-area: operation;
-  background-color: red !important;
+.control {
+  grid-area: control;
+  background-color: red;
 }
 
-@mixin factor-row-creator { 
-  $areas: ();
-  @for $i from 1 through 10 {
-    $nested: "factor-row-" + inspect($i) + " "; 
-    $areas: append($areas, $nested); 
-  }
-  .factor-row {
-    grid-area: factor-row;
-    display: grid;
-    grid-gap: 4px;
-    grid-template-rows: repeat(10, 65px);
-    grid-template-columns: 65px;
-    grid-template-areas: $areas;
-    background-color: purple;
-  }
-  @for $i from 1 through 10 {
-    .factor-row-#{$i} {
-      grid-area: factor-row-#{$i};
-    }
-  }
-}
+// .app > * {
+//   height: 65px;
+//   width: 65px;
+//   padding: 2px;
+//   float: left;
+//   background-color: rgba(111,41,97,.4);
+//   // background-color: nth($colors, 1);
+//   opacity: .33;
+//   border-radius: 8px;
+//   line-height: 57px;
+//   text-align: center;
+//   color: nth($colors, 1);
+//   font-size: 50px;
+//   font-family: sans-serif;
+//   font-weight: 900;
+// }
 
-@include factor-row-creator;
-
-@mixin factor-col-creator { 
+@mixin factor-col-grid-creator { 
   $areas: "";
   @for $i from 1 through 10 {
     $areas: $areas + "factor-col-" + inspect($i) + " "; 
   }
   $areas: str-slice($areas, 1, -2);
-  .factor-col {
-    grid-area: factor-col;
+  .factor-col-grid {
+    grid-area: factor-col-grid;
     display: grid;
     grid-gap: 4px;
-    grid-template-rows: 65px;
-    grid-template-columns: repeat(10, 65px);
+    grid-template-rows: repeat(10, 65px);
+    grid-template-columns: 65px;
     grid-template-areas: $areas;
-    background-color: blue;
-  }
-  @for $i from 1 through 10 {
-    .factor-col-#{$i} {
-      grid-area: factor-col-#{$i};
-    }
   }
 }
 
-@include factor-col-creator;
+@include factor-col-grid-creator;
 
-@mixin product-creator { 
+.factor-col-5 {
+  grid-area: factor-col-grid;
+  background-color: blue;
+}
+
+@mixin product-grid-creator { 
   $areas: ();
   @for $i from 1 through 10 {
     $nested: "";
@@ -127,83 +118,22 @@ html {
     $nested: str-slice($nested, 1, -2);
     $areas: append($areas, $nested);
   }
-  .product {
-    grid-area: product;
+  .product-grid {
+    grid-area: product-grid;
     display: grid;
     grid-gap: 4px;
     grid-template-rows: repeat(10, 65px);
     grid-template-columns: repeat(10, 65px);
     grid-template-areas: $areas;
-    background-color: green;
-  }
-  @for $i from 1 through 10 {
-    @for $j from 1 through 10 {
-      .product-#{$i}-#{$j} {
-        grid-area: product-#{$i}-#{$j};
-      }
-    }
   }
 }
 
-@include product-creator;
+@include product-grid-creator;
 
-.control {
-  grid-area: control;
-  background-color: yellow !important;
+.product-1-2 {
+  grid-area: product-grid;
+  background-color: green;
 }
-
-@mixin keypad-creator { 
-  $areas: ();
-  @for $i from 1 through 5 {
-    $nested: "keypad-" + inspect($i) + " "; 
-    $areas: append($areas, $nested); 
-  }
-  .keypad {
-    grid-area: keypad;
-    display: grid;
-    grid-gap: 4px;
-    grid-template-rows: repeat(5, 65px);
-    grid-template-columns: 65px;
-    grid-template-areas: $areas;
-    background-color: orange;
-  }
-  @for $i from 1 through 5 {
-    .keypad-#{$i} {
-      grid-area: keypad-#{$i};
-    }
-  }
-}
-
-@include keypad-creator;
-
-.time {
-  grid-area: time;
-  background-color: indigo !important;
-}
-
-.operation,
-.factor-row > *,
-.factor-col > *,
-.product > *,
-.control,
-.keypad > *,
-.time {
-  height: 65px;
-  width: 65px;
-  padding: 2px;
-  float: left;
-  background-color: nth($colors, 1);
-  opacity: .33;
-  border-radius: 8px;
-  line-height: 57px;
-  text-align: center;
-  color: nth($colors, 1);
-  font-size: 50px;
-  font-family: sans-serif;
-  font-weight: 900;
-}
-
-/* cell styles */  
 
 .opacity-33 {
 }
