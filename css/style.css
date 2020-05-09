@@ -6,7 +6,6 @@ html {
   box-sizing: inherit;
 }
 
-/* grid containers */
 .app {
   display: grid;
   height: 759px;
@@ -15,11 +14,22 @@ html {
   grid-template-rows: repeat(11, 65px);
   grid-template-columns: repeat(13, 65px);
   grid-template-areas: "operation factor-col factor-col factor-col factor-col factor-col factor-col factor-col factor-col factor-col factor-col ... control" "factor-row product product product product product product product product product product ... ..." "factor-row product product product product product product product product product product ... ..." "factor-row product product product product product product product product product product ... keypad" "factor-row product product product product product product product product product product ... keypad" "factor-row product product product product product product product product product product ... keypad" "factor-row product product product product product product product product product product ... keypad" "factor-row product product product product product product product product product product ... keypad" "factor-row product product product product product product product product product product ... ..." "factor-row product product product product product product product product product product ... ..." "factor-row product product product product product product product product product product ... time";
+  background-color: #FFFFFF;
 }
 
 .operation {
   grid-area: operation;
   background-color: red !important;
+}
+
+.control {
+  grid-area: control;
+  background-color: yellow !important;
+}
+
+.time {
+  grid-area: time;
+  background-color: indigo !important;
 }
 
 .factor-row {
@@ -532,11 +542,6 @@ html {
   grid-area: product-10-10;
 }
 
-.control {
-  grid-area: control;
-  background-color: yellow !important;
-}
-
 .keypad {
   grid-area: keypad;
   display: grid;
@@ -567,34 +572,28 @@ html {
   grid-area: keypad-5;
 }
 
-.time {
-  grid-area: time;
-  background-color: indigo !important;
-}
-
-.operation,
+.product > *,
 .factor-row > *,
 .factor-col > *,
-.product > *,
-.control,
 .keypad > *,
+.operation,
+.control,
 .time {
   height: 65px;
   width: 65px;
   padding: 2px;
   float: left;
-  background-color: white;
+  background-color: #FFFFFF;
   opacity: 0.33;
   border-radius: 8px;
   line-height: 57px;
   text-align: center;
-  color: white;
+  color: #000000;
   font-size: 50px;
   font-family: sans-serif;
   font-weight: 900;
 }
 
-/* cell styles */
 .opacity-1 {
   opacity: 1;
 }
@@ -606,7 +605,7 @@ html {
 .background-clear,
 .border-width-thin,
 .border-width-thick {
-  background-color: white !important;
+  background-color: #FFFFFF !important;
 }
 
 .border-width-thin {

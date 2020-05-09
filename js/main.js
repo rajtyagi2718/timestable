@@ -1,4 +1,6 @@
-//// preamble ////
+// preamble //
+
+import {randbool, randvalue, sortDec} from "./random.js"; 
 
 function assert(condition, message) {
   if (!condition) { 
@@ -6,75 +8,65 @@ function assert(condition, message) {
   }
 }
 
-function randrange(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
+
+// section //
+
+function Section(name, parent) {
+  this.element = document.createElement("section");
+  this.element.setAttribute("class", name);
+  parent.appendChild(this.element);
 }
 
-function randbool() {
-  return (Math.random() < .5);
+// grid //
+
+function Grid(name, parent, arr) {
+  Section.call(this, parent, name);
+  this.cellArr = arr;
 }
 
-function randvalue(arr) {
-  return arr[randrange(0, arr.length)];
+function Grid2d(name, parent, dim0, dim1) {
+  Grid.call(this, parent, name, Array(dim0).fill().map(() => Array(dim1)));
 }
 
-function shuffle(lst) {
-  let i, j, item;
-  for (i = lst.length - 1; i > 0; i--) {
-    j = Math.floor(Math.random() * (i+1));
-    item = lst[i];
-    lst[i] = lst[j];
-    lst[j] = item;
-  }
+function Grid1d(name, parent, dim) {
+  Grid.call(this, parent, name, Array(dim));
 }
 
-function sortReverseNumber(x, y) {
-  return y - x;
+function Grid0d(name, parent) {
+  Grid.call(this, parent, name);
+}
+
+// grid links //
+
+Grid.prototype = Object.create(Section.prototype);
+Grid2d.prototype = Object.create(Grid.prototype);
+Grid1d.prototype = Object.create(Grid.prototype);
+Grid0d.prototype = Object.create(Grid.prototype);
+
+// grid methods //
+
+Section.prototype.get = function() {
+  return this.element;
+}
+
+Grid2d.prototype.get = function(i, j) {
+  return this.cellArr[i][j];
+}
+
+Grid1d.prototype.get = function(k) {
+  return this.cellArr[k];
+}
+
+Grid2d.prototype.select = function(i, j, arg) {
+  this.get(i, j).select(arg);
+}
+
+Grid1d.prototype.select = function(k, arg) {
+  this.get(k).select(arg);
 }
 
 
-// // cell section constructor //
-// 
-// function CellSection(parent, name, array) {
-//   this.element = document.createElement("section");
-//   this.element.setAttribute("class", name);
-//   parent.appendChild(this.element);
-//   this.cellArray = array;
-// }
-// 
-// function CellSection2d(parent, name, dim0, dim1) {
-//   CellSection.call(this, parent, name, Array(dim0).fill().map(() => Array(dim1)));
-// }
-// 
-// function CellSection1d(parent, name, dim) {
-//   CellSection.call(this, parent, name, Array(dim));
-// }
-// 
-// function CellSection0d(parent, name) {
-//   CellSection.call(this, parent, name, Array(1));
-// }
-// 
-// // cell section links //
-// 
-// CellSection2d.prototype = Object.create(CellSection.prototype);
-// CellSection1d.prototype = Object.create(CellSection.prototype);
-// CellSection0d.prototype = Object.create(CellSection.prototype);
-// 
-// // cell section methods //
-// 
-// CellSection2d.prototype.get = function(i, j) {
-//   return this.cellArray[i][j];
-// }
-// 
-// CellSection1d.prototype.get = function(k) {
-//   return this.cellArray[k];
-// }
-// 
-// CellSection0d.prototype.get = function() {
-//   return this.cell[0];
-// }
-// 
-// 
+
 // // grid constructor //
 // 
 // function Grid(parent) {
@@ -460,7 +452,7 @@ function sortReverseNumber(x, y) {
 // 
 //   this.textSet.forEach(v => this.textArray.push(v));
 //   this.textSet.clear();
-//   this.textArray.sort(sortReverseNumber);
+//   this.textArray.sort(sortDec);
 // 
 //   for (let k = 0; k < 5; k++) {
 //     let text = this.textArray.pop();
@@ -725,19 +717,18 @@ function sortReverseNumber(x, y) {
 // 
 // // main //
 // 
+
 const body = document.getElementsByTagName("BODY")[0];
  
-const app = document.createElement("section");
-app.setAttribute("class", "app");
-body.append(app);
+const app = new Section("app", body);
 
 const operation = document.createElement("section");
 operation.setAttribute("class", "operation");
-app.appendChild(operation);
+app.get().appendChild(operation);
 
 const productGrid = document.createElement("section");
 productGrid.setAttribute("class", "product");
-app.appendChild(productGrid);
+app.get().appendChild(productGrid);
 
 const productCell = document.createElement("section");
 productCell.setAttribute("class", "product-1-2");
@@ -745,7 +736,7 @@ productGrid.appendChild(productCell);
 
 const factorRowGrid = document.createElement("section");
 factorRowGrid.setAttribute("class", "factor-row");
-app.appendChild(factorRowGrid);
+app.get().appendChild(factorRowGrid);
 
 const factorRowCell = document.createElement("section");
 factorRowCell.setAttribute("class", "factor-row-7");
@@ -753,7 +744,7 @@ factorRowGrid.appendChild(factorRowCell);
 
 const factorColGrid = document.createElement("section");
 factorColGrid.setAttribute("class", "factor-col");
-app.appendChild(factorColGrid);
+app.get().appendChild(factorColGrid);
 
 const factorColCell = document.createElement("section");
 factorColCell.setAttribute("class", "factor-col-5");
@@ -761,11 +752,11 @@ factorColGrid.appendChild(factorColCell);
 
 const control = document.createElement("section");
 control.setAttribute("class", "control");
-app.appendChild(control);
+app.get().appendChild(control);
 
 const keypad = document.createElement("section");
 keypad.setAttribute("class", "keypad");
-app.appendChild(keypad);
+app.get().appendChild(keypad);
 
 const keypadCell = document.createElement("section");
 keypadCell.setAttribute("class", "keypad-5");
@@ -773,7 +764,7 @@ keypad.appendChild(keypadCell);
 
 const time = document.createElement("section");
 time.setAttribute("class", "time");
-app.appendChild(time);
+app.get().appendChild(time);
 
 // const element1 = document.createElement("section");
 // element1.setAttribute("class", "time");

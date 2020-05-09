@@ -1,0 +1,29 @@
+@use "palette";
+
+@mixin background-color-mixin {
+  @for $i from 0 through 10 {
+    .background-color-#{$i} {
+      @if $i == 0 {
+        background-color: nth(palette.$grays, 1);
+      }
+      @else {
+        background-color: nth(palette.$colors, $i);
+      }
+    }
+  }
+}
+
+@mixin border-color-mixin {
+  @for $i from 0 through 10 {
+    .border-color-#{$i} {
+      @if $i == 0 {
+        border-color: nth(palette.$grays, 1);
+      }
+      @else {
+        border-color: nth(palette.$colors, $i);
+      }
+      border-style: solid;
+      border-width: 0px;
+    }
+  }
+}
