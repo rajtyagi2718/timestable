@@ -1,3 +1,9 @@
+function assert(condition, message) {
+  if (!condition) { 
+    throw message || "Assertion failed";
+  }
+}
+
 function randrange(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }

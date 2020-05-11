@@ -1,40 +1,25 @@
-// preamble // 
 import {randbool, randvalue, sortDec} from "./random.js"; 
 import {section} from "./section.js";
+import {Operator} from "./operator.js";
 import {FactorRow, FactorCol} from "./factor.js";
-// import {Product} from "./product.js";
-
-function assert(condition, message) {
-  if (!condition) { 
-    throw message || "Assertion failed";
-  }
-}
+import {Product} from "./product.js";
+import {Keypad} from "./keypad.js";
+import {Controller} from "./controller.js";
+import {Timer} from "./timer.js";
+import {Grader} from "./grader.js";
+import {Quiz} from "./quiz.js";
 
 const body = document.getElementsByTagName("BODY")[0];
- 
 const app = section("app", body);
-
+const operator = new Operator(app);
 const factorRow = new FactorRow(app); 
-const delay = 500;
-setTimeout(() => {factorRow.select(2);}, delay);
-setTimeout(() => {factorRow.deselect(2);}, delay*2);
-setTimeout(() => {factorRow.hide(2);}, delay*3);
-setTimeout(() => {factorRow.show(2);}, delay*4);
-setTimeout(() => {factorRow.select(2);}, delay*5);
-setTimeout(() => {factorRow.hide(2);}, delay*6);
-setTimeout(() => {factorRow.show(2);}, delay*7);
-
 const factorCol = new FactorCol(app); 
-setTimeout(() => {factorCol.select(2);}, delay);
-setTimeout(() => {factorCol.deselect(2);}, delay*2);
-setTimeout(() => {factorCol.hide(2);}, delay*3);
-setTimeout(() => {factorCol.show(2);}, delay*4);
-setTimeout(() => {factorCol.select(2);}, delay*5);
-setTimeout(() => {factorCol.hide(2);}, delay*6);
-setTimeout(() => {factorCol.show(2);}, delay*7);
+const product = new Product(app); 
+const keypad = new Keypad(app); 
+const controller = new Controller(app);
+const timer = new Timer(app);
+const grader = new Grader();
+const quiz = new Quiz(operator, factorRow, factorCol, product, keypad,
+                      controller, timer, grader);
 
-const operator = section("operator", app);
-const controller = section("controller", app);
-const timer = section("timer", app);
-const keypad = section("keypad--3", app);
-const productCell = section("product-1-2", app);
+quiz.toggleController();

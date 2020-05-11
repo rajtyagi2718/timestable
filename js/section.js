@@ -5,20 +5,26 @@ const section = function(name, parent) {
   return element;
 }
 
-function Area(cells) {
+function Area(name, parent) {
+  this.element = section(name, parent);
+}
+
+function Grid(name, parent, cells) {
+  Area.call(this, name, parent);
   this.cells = cells;
 }
 
-function Area1d(name, parent, size) {
-  Area.call(this, Array(size));
+function Grid1d(name, parent, size) {
+  Grid.call(this, name, parent, Array(size));
 }
 
-function Area2d(name, parent, size) {
-  Area.call(this, Array(size).fill().map(() => Array(size)));
+function Grid2d(name, parent, size) {
+  Grid.call(this, name, parent, Array(size).fill().map(() => Array(size)));
 }
 
-Area1d.prototype = Object.create(Area.prototype);
-Area2d.prototype = Object.create(Area.prototype);
+Grid.prototype = Object.create(Area.prototype);
+Grid1d.prototype = Object.create(Grid.prototype);
+Grid2d.prototype = Object.create(Grid.prototype);
 
 Area.prototype.select = function(...args) {
   this.get(args).select();
@@ -40,12 +46,16 @@ Area.prototype.toggle = function(...args) {
   this.get(args).toggle();
 }
 
-Area1d.prototype.get = function(k) {
-  return this.cells[k];
+Area.prototype.get = function() {
+  return this.element;
 }
 
-Area2d.prototype.get = function(i, j) {
-  return this.cells[i][j];
+Grid1d.prototype.get = function(args) {
+  return this.cells[args[0]-1];
 }
 
-export {section, Area1d, Area2d};
+Grid2d.prototype.get = function(args) {
+  return this.cells[args[0]-1][args[1]-1];
+}
+
+export {section, Area, Grid1d, Grid2d};

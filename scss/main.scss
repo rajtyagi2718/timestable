@@ -12,7 +12,21 @@ html {
 
 @include grid.app-mixin;
 
-.app > * {
+@include grid.factor-row-mixin;
+
+@include grid.factor-col-mixin;
+
+@include grid.product-mixin;
+
+@include grid.keypad-mixin;
+
+.operator,
+.controller,
+.timer,
+.factor-row > *,
+.factor-col > *,
+.keypad > *,
+.product > * {
   height: 65px;
   width: 65px;
   padding: 2px;
@@ -20,7 +34,7 @@ html {
   background-color: nth(palette.$lights, 1);
   opacity: .33;
   border-radius: 8px;
-  line-height: 57px;
+  line-height: 61px;
   text-align: center;
   color: nth(palette.$lights, 1);
   font-size: 50px;
@@ -56,4 +70,3 @@ html {
 @include cell.background-color-mixin;
 
 @include cell.border-color-mixin;
-

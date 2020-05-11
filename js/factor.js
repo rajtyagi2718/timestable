@@ -1,31 +1,46 @@
-import {section, Area1d} from "./section.js";
+import {section, Grid1d} from "./section.js";
 import {FactorCell} from "./cell.js";
 
 function FactorRow(parent) {
-  let size = 10;
   let name = "factor-row";
-  Area1d.call(this, name, parent, size);
+  let size = 10;
+  Grid1d.call(this, name, parent, size);
   for (let k = 1; k <= size; k++) { 
     let index = k.toString();
-    let element = section(name + "-" + index, parent);
+    let element = section(name + "-" + index, this.element);
     this.cells[k-1] = new FactorCell(element, index, index); 
   }
 }
 
-FactorRow.prototype = Object.create(Area1d.prototype);
-
 function FactorCol(parent) {
-  let size = 10;
   let name = "factor-col";
-  Area1d.call(this, name, parent, size);
+  let size = 10;
+  Grid1d.call(this, name, parent, size);
   let color = (0).toString();
   for (let k = 1; k <= size; k++) { 
     let index = k.toString();
-    let element = section(name + "-" + index, parent);
+    let element = section(name + "-" + index, this.element);
     this.cells[k-1] = new FactorCell(element, color, index); 
   }
 }
 
-FactorCol.prototype = Object.create(Area1d.prototype);
+FactorRow.prototype = Object.create(Grid1d.prototype);
+FactorCol.prototype = Object.create(Grid1d.prototype);
+
+FactorRow.prototype.listen = function(quiz) {
+  for (let k = 1; k <= 10; k++) {
+    this.get([k]).element.addEventListener(
+      "click", () => {quiz.toggleFactorRow(k);}, {}
+    );
+  }
+}
+
+FactorCol.prototype.listen = function(quiz) {
+  for (let k = 1; k <= 10; k++) {
+    this.get([k]).element.addEventListener(
+      "click", () => {quiz.toggleFactorCol(k);}, {}
+    );
+  }
+}
 
 export {FactorRow, FactorCol};

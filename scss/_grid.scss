@@ -2,42 +2,34 @@
 
 @mixin app-mixin {
   $areas: ();
-  @for $i from 0 through 10 {
+  @for $i from 1 through 11 {
     $nested: "";
-    @for $j from 0 through 12 {
+    @for $j from 1 through 13 {
       $name: "...";
-      @if $i == 0 and $j == 0 {
+      @if $i == 1 and $j == 1 {
         $name: "operator";
       }
-      @else if $j == 0 and $i <= 10 {
-        $name: "factor-row-" + inspect($i);
+      @else if $j == 1 and $i <= 11 {
+        $name: "factor-row";
       }
-      @else if $i == 0 and $j <= 10 {
-        $name: "factor-col-" + inspect($j);
+      @else if $i == 1 and $j <= 11 {
+        $name: "factor-col";
       }
-      @else if $i <= 10 and $j <= 10 {
-        $name: "product-" + inspect($i) + "-" + inspect($j);
+      @else if $i <= 11 and $j <= 11 {
+        $name: "product";
       }
-      @else if $j == 11 {
+      @else if $j == 12 {
         // $name: "...";
       }
-      @else if $i == 0 {
+      @else if $i == 1 {
         $name: "controller";
       }
-      @else if $i >= 3 and $i <= 7 {
-        $name: "keypad-" + inspect($i - 2);
+      @else if $i >= 4 and $i <= 8 {
+        $name: "keypad";
       }
-      @else if $i == 10 {
+      @else if $i == 11 {
         $name: "timer";
       }
-
-      @if $name != "..." {
-        .#{$name} {
-          grid-area: #{$name};
-          background-color: purple !important;
-        }
-      }
-
       $name: $name + " ";
       $nested: $nested + $name;
     }
@@ -54,5 +46,119 @@
     grid-template-columns: repeat(13, 65px);
     grid-template-areas: $areas;
     background-color: nth(palette.$lights, 1);
+  }
+
+  .operator {
+    grid-area: operator;
+  }
+  
+  .controller {
+    grid-area: controller;
+  }
+  
+  .timer {
+    grid-area: timer;
+  }
+}
+
+@mixin factor-row-mixin { 
+  $areas: ();
+  @for $i from 1 through 10 {
+    $nested: "factor-row-" + inspect($i) + " "; 
+    $areas: append($areas, $nested); 
+  }
+
+  .factor-row {
+    grid-area: factor-row;
+    display: grid;
+    grid-gap: 4px;
+    grid-template-rows: repeat(10, 65px);
+    grid-template-columns: 65px;
+    grid-template-areas: $areas;
+    background-color: nth(palette.$lights, 1);
+  }
+
+  @for $i from 1 through 10 {
+    .factor-row-#{$i} {
+      grid-area: factor-row-#{$i};
+    }
+  }
+}
+
+@mixin factor-col-mixin { 
+  $areas: "";
+  @for $i from 1 through 10 {
+    $areas: $areas + "factor-col-" + inspect($i) + " "; 
+  }
+  $areas: str-slice($areas, 1, -2);
+
+  .factor-col {
+    grid-area: factor-col;
+    display: grid;
+    grid-gap: 4px;
+    grid-template-rows: 65px;
+    grid-template-columns: repeat(10, 65px);
+    grid-template-areas: $areas;
+    background-color: nth(palette.$lights, 1);
+  }
+
+  @for $i from 1 through 10 {
+    .factor-col-#{$i} {
+      grid-area: factor-col-#{$i};
+    }
+  }
+}
+
+@mixin product-mixin { 
+  $areas: ();
+  @for $i from 1 through 10 {
+    $nested: "";
+    @for $j from 1 through 10 {
+      $nested: $nested + "product-" + inspect($i) + "-" + inspect($j) + " "; 
+    }
+    $nested: str-slice($nested, 1, -2);
+    $areas: append($areas, $nested);
+  }
+
+  .product {
+    grid-area: product;
+    display: grid;
+    grid-gap: 4px;
+    grid-template-rows: repeat(10, 65px);
+    grid-template-columns: repeat(10, 65px);
+    grid-template-areas: $areas;
+    background-color: nth(palette.$lights, 1);
+  }
+
+  @for $i from 1 through 10 {
+    @for $j from 1 through 10 {
+      .product-#{$i}-#{$j} {
+        grid-area: product-#{$i}-#{$j};
+      }
+    }
+  }
+}
+
+@mixin keypad-mixin { 
+  $areas: ();
+  @for $i from 1 through 5 {
+    $nested: "keypad-" + inspect($i) + " "; 
+    $areas: append($areas, $nested); 
+  }
+
+  .keypad {
+    grid-area: keypad;
+    display: grid;
+    grid-gap: 4px;
+    grid-template-rows: repeat(5, 65px);
+    grid-template-columns: 65px;
+    grid-template-areas: $areas;
+    background-color: nth(palette.$lights, 1);
+  }
+
+  @for $i from 1 through 5 {
+    .keypad-#{$i} {
+      grid-area: keypad-#{$i};
+    }
   }
 }
