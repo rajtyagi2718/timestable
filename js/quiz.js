@@ -19,6 +19,7 @@ function Quiz(operator, factorRow, factorCol, product, keypad, controller,
 
   this.row = 0;
   this.col = 0;
+  this.asked = false;
   this.answered = true;
   this.questions = -1;
   this.rowArr = Array();
@@ -31,7 +32,7 @@ function Quiz(operator, factorRow, factorCol, product, keypad, controller,
   }
   this.play = false;
 
-  this.askDelay = 1000;
+  this.askDelay = 500;
   this.showDelay = 2000;
   this.clearDelay = 300;
 }
@@ -45,6 +46,7 @@ Quiz.prototype.select = function() {
   
 Quiz.prototype.ask = function() {
   console.log("what is", this.row, "x", this.col, "?");
+  this.asked = true;
   this.factorRow.select(this.row);
   setTimeout(() => {this.operator.select();}, this.askDelay);
   setTimeout(() => {this.factorCol.select(this.col);}, this.askDelay*2);
@@ -87,7 +89,7 @@ Quiz.prototype.clear = function() {
   setTimeout(() => {this.operator.deselect();},          this.clearDelay*1);
   setTimeout(() => {this.factorRow.deselect(this.row);}, this.clearDelay*2);
   setTimeout(() => {this.keypad.clear(this.row);},       this.clearDelay*2);
-  setTimeout(() => {this.query();},                      this.clearDelay*4);
+  setTimeout(() => {this.asked = false; this.query();},                      this.clearDelay*4);
 }
 
 Quiz.prototype.query = function() {
@@ -125,9 +127,11 @@ Quiz.prototype.toggleFactorRow = function(k) {
   }
   if (this.rowSet.has(k)) {
     this.rowSet.delete(k);
+    this.factorRow.hide(k);
   }
   else {
     this.rowSet.add(k);
+    this.factorRow.show(k);
   }
 }
 
@@ -137,9 +141,11 @@ Quiz.prototype.toggleFactorCol = function(k) {
   }
   if (this.colSet.has(k)) {
     this.colSet.delete(k);
+    this.factorCol.hide(k);
   }
   else {
     this.colSet.add(k);
+    this.factorCol.show(k);
   }
 }
 
@@ -150,9 +156,12 @@ Quiz.prototype.toggleController = function() {
     if (!this.answered) {
       this.timer.resume(this);
     }
-    else { 
+    else if (!this.asked) {
       this.start();
     }
+    // else {
+    //   console.log("play, answered, asked: quiz no start");
+    // }
   }
   else {
     this.controller.deselect();

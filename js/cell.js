@@ -244,7 +244,7 @@ TimerCell.prototype.start = function(quiz) {
     // trigger alarm 
     if (count <= 0) {
       console.log("count:", count);
-      quiz.showAnswer();
+      quiz.show();
     }
   }, 1000);
 }
@@ -260,6 +260,7 @@ TimerCell.prototype.updateRemain = function() {
   
 TimerCell.prototype.toggle = function() {
   this.set(this.nextTotal[this.total]);
+  console.log("timer set to", this.total, "sec");
 }
 
 TimerCell.prototype.nextTotal = {

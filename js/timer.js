@@ -17,8 +17,12 @@ Timer.prototype.restart = function(quiz) {
 }
 
 Timer.prototype.resume = function(quiz) {
-  // assert(this.interval == null, "interval already exists. cannot resume timer.")
-  this.interval = this.get().start(quiz);
+  if (this.interval != null) {
+    // console.log("interval already exists. cannot resume timer.");
+  }
+  else {
+    this.interval = this.get().start(quiz);
+  }
 }
 
 Timer.prototype.pause = function() {
