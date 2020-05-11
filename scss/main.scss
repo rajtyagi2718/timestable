@@ -1,5 +1,5 @@
 @use "_palette";
-@use "_cells";
+@use "_cell";
 @use "_grid";
 
 html {
@@ -12,21 +12,7 @@ html {
 
 @include grid.app-mixin;
 
-@include grid.factor-row-mixin;
-
-@include grid.factor-col-mixin;
-
-@include grid.product-mixin;
-
-@include grid.keypad-mixin;
-
-.product > *,
-.factor-row > *,
-.factor-col > *,
-.keypad > *,
-.operation,
-.control,
-.time {
+.app > * {
   height: 65px;
   width: 65px;
   padding: 2px;
@@ -36,38 +22,38 @@ html {
   border-radius: 8px;
   line-height: 57px;
   text-align: center;
-  color: nth(palette.$darks, 1);
+  color: nth(palette.$lights, 1);
   font-size: 50px;
   font-family: sans-serif;
   font-weight: 900;
 }
 
-.opacity-33 {
+.translucent {
 }
 
-.opacity-1 {
+.opaque {
   opacity: 1;
 }
 
-.cell-font-medium {
+.font-medium {
   font-size: 35px;
 }
 
-.background-clear, 
-.border-width-thin, 
-.border-width-thick {
+.hidden, 
+.border-thin, 
+.border-thick {
   background-color: nth(palette.$lights, 1) !important;
 }
 
-.border-width-thin {
+.border-thin {
   border-width: 8px !important;
 }
 
-.border-width-thick {
+.border-thick {
   border-width: 20px !important;
 }
 
-@include cells.background-color-mixin;
+@include cell.background-color-mixin;
 
-@include cells.border-color-mixin;
+@include cell.border-color-mixin;
 
