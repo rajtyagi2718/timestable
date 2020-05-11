@@ -12,13 +12,53 @@ html {
 
 @include grid.app-mixin;
 
-@include grid.factor-row-mixin;
+.operator {
+  grid-area: operator;
+}
 
-@include grid.factor-col-mixin;
+.controller {
+  grid-area: controller;
+}
 
-@include grid.product-mixin;
+.timer {
+  grid-area: timer;
+}
 
-@include grid.keypad-mixin;
+.factor-row {
+  grid-area: factor-row;
+  display: grid;
+  grid-gap: 4px;
+  grid-template-rows: repeat(10, 65px);
+  grid-template-columns: 65px;
+  background-color: nth(palette.$lights, 1);
+}
+
+.factor-col {
+  grid-area: factor-col;
+  display: grid;
+  grid-gap: 4px;
+  grid-template-rows: 65px;
+  grid-template-columns: repeat(10, 65px);
+  background-color: nth(palette.$lights, 1);
+}
+
+.product {
+  grid-area: product;
+  display: grid;
+  grid-gap: 4px;
+  grid-template-rows: repeat(10, 65px);
+  grid-template-columns: repeat(10, 65px);
+  background-color: nth(palette.$lights, 1);
+}
+
+.keypad {
+  grid-area: keypad;
+  display: grid;
+  grid-gap: 4px;
+  grid-template-rows: repeat(5, 65px);
+  grid-template-columns: 65px;
+  background-color: nth(palette.$lights, 1);
+}
 
 .operator,
 .controller,
