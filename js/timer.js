@@ -10,29 +10,28 @@ function Timer(parent) {
 Timer.prototype = Object.create(Area.prototype);
 
 Timer.prototype.restart = function(quiz) {
-  this.get().reset();
+  this.get().show();
   if (quiz.play) {
     this.resume(quiz);
   }
 }
 
 Timer.prototype.resume = function(quiz) {
-  if (this.interval != null) {
-    // console.log("interval already exists. cannot resume timer.");
-  }
-  else {
-    this.interval = this.get().start(quiz);
-  }
+  this.get().select(quiz);
 }
 
 Timer.prototype.pause = function() {
-  this.get().updateRemain();
-  this.stop();
+  this.get().pause();
+}
+
+Timer.prototype.hide = function(quiz) {
+  if (quiz.play) {
+    this.get().hide();
+  }
 }
 
 Timer.prototype.stop = function() {
-  clearInterval(this.interval);
-  this.interval = null;
+  this.get().deselect();
 }
 
 Timer.prototype.toggle = function() {

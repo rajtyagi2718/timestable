@@ -38,6 +38,7 @@ function TimerCell(element) {
   this.total = 10;
   this.alarm = 0;
   this.remain = 0;
+  this.interval = null;
 }
 
 
@@ -216,26 +217,44 @@ KeypadCell.prototype.deselect = function(color) {
 
 // timer //
 
-TimerCell.prototype.set = function(total) {
-  this.total = total;
-  this.reset();
-}
-
-TimerCell.prototype.reset = function() {
+TimerCell.prototype.show = function(total) {
+  if (total != null) {
+    this.total = total;
+  }
   // timer stops when remain < 1000
   this.remain = this.total * 1000 + 999;
+  this.changeText(this.total);
+}
+  
+TimerCell.prototype.hide = function() {
+  this.deselect();
+  this.hideText();
+}
+
+TimerCell.prototype.pause = function() {
+  this.updateRemain();
+  this.deselect();
   this.changeText(this.total);
   this.showText();
 }
 
-TimerCell.prototype.start = function(quiz) {
+TimerCell.prototype.select = function(quiz) {
+  if (this.interval != null) {
+    console.log("timercell select attempted, but interval not null");
+    return;
+  }
+  // display current time
+  Cell.prototype.select.call(this);
+  this.changeText(this.getCount().toString());
+  this.showText();
+
   // set alarm
   let now = new Date;
   this.alarm = now.getTime() + this.remain;
 
-  // count down, return handle
+  // count down, store handler
   let count = 0;
-  return setInterval(() => {
+  this.interval = setInterval(() => {
     this.updateRemain();
     count = this.getCount();
     this.changeText(count.toString());
@@ -249,6 +268,18 @@ TimerCell.prototype.start = function(quiz) {
   }, 1000);
 }
 
+TimerCell.prototype.deselect = function() {
+  Cell.prototype.deselect.call(this);
+  clearInterval(this.interval);
+  this.interval = null; 
+}
+
+TimerCell.prototype.toggle = function() {
+  this.show(this.nextTotal[this.total]);
+  this.showText();
+  console.log("timer set to", this.total, "sec");
+}
+
 TimerCell.prototype.getCount = function() {
   return Math.floor(this.remain / 1000);
 }
@@ -258,11 +289,6 @@ TimerCell.prototype.updateRemain = function() {
   this.remain = this.alarm - now.getTime();
 }
   
-TimerCell.prototype.toggle = function() {
-  this.set(this.nextTotal[this.total]);
-  console.log("timer set to", this.total, "sec");
-}
-
 TimerCell.prototype.nextTotal = {
   10 : 5,
    5 : 2,

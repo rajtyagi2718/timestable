@@ -88,8 +88,10 @@ Quiz.prototype.clear = function() {
   setTimeout(() => {this.factorCol.deselect(this.col);}, this.clearDelay);
   setTimeout(() => {this.operator.deselect();},          this.clearDelay*1);
   setTimeout(() => {this.factorRow.deselect(this.row);}, this.clearDelay*2);
-  setTimeout(() => {this.keypad.clear(this.row);},       this.clearDelay*2);
-  setTimeout(() => {this.asked = false; this.query();},                      this.clearDelay*4);
+  setTimeout(() => {this.keypad.clear(this.row); 
+                    this.timer.hide(this);},             this.clearDelay*2);
+  setTimeout(() => {this.asked = false; 
+                    this.query();},                      this.clearDelay*4);
 }
 
 Quiz.prototype.query = function() {
@@ -159,9 +161,6 @@ Quiz.prototype.toggleController = function() {
     else if (!this.asked) {
       this.start();
     }
-    // else {
-    //   console.log("play, answered, asked: quiz no start");
-    // }
   }
   else {
     this.controller.deselect();
