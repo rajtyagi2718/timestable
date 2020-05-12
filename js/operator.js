@@ -10,7 +10,7 @@ Operator.prototype = Object.create(Area.prototype);
 
 Operator.prototype.listen = function(quiz) {
   this.get().element.addEventListener(
-      "click", () => {quiz.toggleControl();}, {}
+      "click", () => {quiz.toggleController();}, {}
   );
 }
 

@@ -116,6 +116,7 @@ Quiz.prototype.start = function(questions=-1) {
 }
 
 // toggle methods //
+
 Quiz.prototype.toggleOperator = function() {
   if (this.play) {
     return;
@@ -127,6 +128,7 @@ Quiz.prototype.toggleFactorRow = function(k) {
   if (this.play) {
     return;
   }
+  this.show();
   if (this.rowSet.has(k)) {
     this.rowSet.delete(k);
     this.factorRow.hide(k);
@@ -141,6 +143,7 @@ Quiz.prototype.toggleFactorCol = function(k) {
   if (this.play) {
     return;
   }
+  this.show();
   if (this.colSet.has(k)) {
     this.colSet.delete(k);
     this.factorCol.hide(k);

@@ -134,11 +134,6 @@ FactorCell.prototype.hide = function() {
   this.deselect();
 }
 
-FactorCell.prototype.show = function() {
-  Cell.prototype.show.call(this);
-  this.showText();
-}
-
 FactorCell.prototype.toggle = function() {
   if (Cell.prototype.toggle.call(this)) {
     this.deselect();
