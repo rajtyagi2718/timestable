@@ -67,6 +67,21 @@ Keypad.prototype.isCorrect = function(...args) {
   return this.get(args).isCorrect;
 }
 
+Keypad.prototype.setDiv = function(grader, i, j) {
+  for (let k = 1; k <= 5; k++) {
+    if (k != 3) {
+      this.hide(k);
+    }
+    else {
+      this.show(grader.getAnswer(i,j).toString(), true, 3);
+    }
+  }
+}
+
+Keypad.prototype.clearDiv = function(color) {
+  this.deselect(color, 3);
+}  
+
 Keypad.prototype.listen = function(quiz) {
   for (let k = 1; k <= 5; k++) {
     this.get([k]).element.addEventListener(

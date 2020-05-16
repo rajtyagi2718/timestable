@@ -1,4 +1,4 @@
-import {randvalue} from "./random.js";
+import {randvalue, randbool} from "./random.js";
 
 function Quiz(operator, factorRow, factorCol, product, keypad, controller, 
               timer, grader) {
@@ -35,6 +35,11 @@ function Quiz(operator, factorRow, factorCol, product, keypad, controller,
   this.askDelay = 500;
   this.showDelay = 2000;
   this.clearDelay = 300;
+
+  this.mul = true;
+  this.div = true;
+  this.isMul = true;
+  this.divRow = true;
 }
 
 // query methods //
@@ -45,7 +50,27 @@ Quiz.prototype.select = function() {
 }
   
 Quiz.prototype.ask = function() {
+  if (this.mul && !this.div) {
+    this.askMul();
+  }
+  else if (!this.mul && this.div) {
+    this.divRow = randbool();
+    this.askDiv();
+  }
+  else if (this.mul && this.div) {
+    if (randbool()) {
+      this.askMul();
+    }
+    else {
+      this.divRow = randbool();
+      this.askDiv();
+    }
+  }
+}
+
+Quiz.prototype.askMul = function() {
   console.log("what is", this.row, "x", this.col, "?");
+  this.isMul = true;
   this.asked = true;
   this.factorRow.select(this.row);
   setTimeout(() => {this.operator.select();}, this.askDelay);
@@ -56,7 +81,7 @@ Quiz.prototype.ask = function() {
                     this.answered = false;}, this.askDelay*4);
 }
 
-Quiz.prototype.check = function(k) {
+Quiz.prototype.checkMul = function(k) {
   if (this.answered) {
     return;
   }
@@ -64,7 +89,7 @@ Quiz.prototype.check = function(k) {
   if (this.keypad.isCorrect(k)) {
     this.grader.increment(this.row, this.col);
     console.log("correct!");
-    this.show(this.row, this.col);
+    this.show();
   }
   else {
     console.log("incorrect.");
@@ -79,15 +104,15 @@ Quiz.prototype.show = function() {
   this.timer.stop();
   this.product.show(this.row, this.col);
   console.log("answer:", this.grader.getAnswer(this.row, this.col));
-  setTimeout(() => {this.clear();}, this.showDelay);
+  setTimeout(() => {this.clearMul();}, this.showDelay);
 }
 
-Quiz.prototype.clear = function() {
+Quiz.prototype.clearMul = function() {
   this.product.deselect(this.grader.getGrade(this.row, this.col),
                         this.row, this.col);
   setTimeout(() => {this.factorCol.deselect(this.col);}, this.clearDelay);
-  setTimeout(() => {this.operator.deselect();},          this.clearDelay*1);
-  setTimeout(() => {this.factorRow.deselect(this.row);}, this.clearDelay*2);
+  setTimeout(() => {this.operator.deselect();},          this.clearDelay*2);
+  setTimeout(() => {this.factorRow.deselect(this.row);}, this.clearDelay*3);
   setTimeout(() => {this.keypad.clear(this.row); 
                     this.timer.hide(this);},             this.clearDelay*2);
   setTimeout(() => {this.asked = false; 
@@ -126,6 +151,9 @@ Quiz.prototype.toggleOperator = function() {
 
 Quiz.prototype.toggleFactorRow = function(k) {
   if (this.play) {
+    if (!this.isMul && !this.divRow) {
+      this.checkDiv(k); 
+    }    
     return;
   }
   this.show();
@@ -141,6 +169,9 @@ Quiz.prototype.toggleFactorRow = function(k) {
 
 Quiz.prototype.toggleFactorCol = function(k) {
   if (this.play) {
+    if (!this.isMul && this.divRow) {
+      this.checkDiv(k); 
+    }    
     return;
   }
   this.show();
@@ -173,17 +204,113 @@ Quiz.prototype.toggleController = function() {
 
 Quiz.prototype.toggleKeypad = function(k) {
   if (this.play) {
-    this.check(k);
+    if (this.isMul) {
+      this.checkMul(k);
+    }
+    else {
+      // terminate keypad clicks
+    }
   }
 }
 
 Quiz.prototype.toggleTimer = function() {
   if (this.play) {
-    this.show();
+    if (this.isMul) {
+      this.show();
+    }
+    else {
+      this.showDiv();
+    }
   }
   else {
     this.timer.toggle();
   }
+}
+
+// division methods //
+
+Quiz.prototype.askDiv = function() {
+  console.log("what is", this.grader.getAnswer(this.row, this.col), "/", this.col, "?");
+  this.isMul = false;
+  this.asked = true;
+  if (this.divRow) {
+    this.factorRow.select(this.row);
+    setTimeout(() => {this.factorCol.setDiv();}, this.askDelay*2);
+  }
+  else {
+    this.factorRow.setDiv();
+    setTimeout(() => {this.factorCol.select(this.col);}, this.askDelay*2);
+  }
+  setTimeout(() => {this.operator.select();}, this.askDelay);
+  setTimeout(() => {this.keypad.setDiv(this.grader, this.row, this.col)
+                    this.timer.restart(this);
+                    this.answered = false;},  this.askDelay*3);
+}
+
+Quiz.prototype.checkDiv = function(k) {
+  if (this.answered) {
+    return;
+  }
+  let isCorrect = null;
+  if (this.divRow) {
+    let answer = this.col;
+    isCorrect = (answer == k);
+    this.factorCol.selectDiv(isCorrect, k);
+  }
+  else {
+    let answer = this.row;
+    isCorrect = (answer == k);
+    this.factorRow.selectDiv(isCorrect, k);
+  }
+  if (isCorrect) {
+    console.log("correct!");
+    this.keypad.select(this.row, 3); 
+    this.grader.increment(this.row, this.col);
+    this.showDiv()
+  }
+  else {
+    console.log("incorrect.");
+  }
+}
+
+Quiz.prototype.showDiv = function() {
+  if (this.answered) {
+    return;
+  }
+  this.answered = true;
+  if (this.divRow) {
+    this.factorCol.select(this.col);
+  }
+  else {
+    this.factorRow.select(this.row);
+  }
+  this.timer.stop();
+  this.product.showDiv(this.row, this.col);
+  console.log("answer:", this.grader.getAnswer(this.row, this.col));
+  setTimeout(() => {this.clearDiv();}, this.showDelay);
+}
+
+Quiz.prototype.clearDiv = function() {
+  this.product.deselect(this.grader.getGrade(this.row, this.col),
+                        this.row, this.col);
+  setTimeout(() => {if (this.divRow) {
+                      console.log("clearDiv, divRow, factorCol.resetDiv");
+                      this.factorCol.resetDiv();
+                    }
+                    else {
+                      this.factorCol.deselect(this.col);
+                    }},                                     this.clearDelay);
+  setTimeout(() => {this.operator.deselect();},             this.clearDelay*2);
+  setTimeout(() => {if (this.divRow) {
+                      this.factorRow.deselect(this.row);
+                    }
+                    else {
+                      this.factorRow.resetDiv();
+                    }},                                     this.clearDelay*3);
+  setTimeout(() => {this.keypad.clearDiv(this.row); 
+                    this.timer.hide(this);},                this.clearDelay*2);
+  setTimeout(() => {this.asked = false; 
+                    this.query();},                      this.clearDelay*4);
 }
 
 export {Quiz};

@@ -23,4 +23,8 @@ Product.prototype.deselect = function(grade, ...args) {
   this.get(args).deselect(grade);
 }
 
+Product.prototype.showDiv = function(...args) {
+  this.get(args).showDiv();
+}
+
 export {Product};

@@ -145,6 +145,18 @@ FactorCell.prototype.toggle = function() {
   }
 }
 
+FactorCell.prototype.selectDiv = function(isCorrect) {
+  if (!isCorrect) {
+    this.hideText();
+  }
+  Cell.prototype.select.call(this);
+}
+
+FactorCell.prototype.deselectDiv = function() {
+  Cell.prototype.deselect.call(this);
+  this.showText();
+}
+
 // product //
 
 ProductCell.prototype.select = function() {
@@ -179,9 +191,15 @@ ProductCell.prototype.removeGradeStyle = function() {
   this.removeStyle(this.gradeStyle);
 }
 
+ProductCell.prototype.showDiv = function() {
+  this.select();
+  this.showText();
+}
+
 // keypad //
 
 KeypadCell.prototype.show = function(text, isCorrect) {
+  Cell.prototype.show.call(this);
   this.changeText(text);
   if (text == "100") {
     this.addMediumFont(); 
@@ -208,6 +226,16 @@ KeypadCell.prototype.deselect = function(color) {
     this.removeColor(color.toString());
     this.isCorrect = false;
   }
+}
+
+KeypadCell.prototype.setDiv = function(answer) {
+  this.isCorrect = true;
+  let text = answer.toString();
+  this.changeText(text);
+  if (text == "100") {
+    this.addMediumFont(); 
+  }
+  this.showText();
 }
 
 // timer //
