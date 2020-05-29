@@ -39,7 +39,7 @@ function Quiz(operator, factorRow, factorCol, product, keypad, controller,
   this.mul = true;
   this.div = true;
   this.isMul = true;
-  this.divRow = true;
+  this.divRow = false;
 }
 
 // query methods //
@@ -156,7 +156,14 @@ Quiz.prototype.toggleFactorRow = function(k) {
     }    
     return;
   }
-  this.show();
+
+  if (this.isMul) {
+    this.show();
+  }
+  else {
+    this.showDiv();
+  }
+    
   if (this.rowSet.has(k)) {
     this.rowSet.delete(k);
     this.factorRow.hide(k);
@@ -174,7 +181,14 @@ Quiz.prototype.toggleFactorCol = function(k) {
     }    
     return;
   }
-  this.show();
+
+  if (this.isMul) {
+    this.show();
+  }
+  else {
+    this.showDiv();
+  }
+    
   if (this.colSet.has(k)) {
     this.colSet.delete(k);
     this.factorCol.hide(k);
@@ -294,7 +308,6 @@ Quiz.prototype.clearDiv = function() {
   this.product.deselect(this.grader.getGrade(this.row, this.col),
                         this.row, this.col);
   setTimeout(() => {if (this.divRow) {
-                      console.log("clearDiv, divRow, factorCol.resetDiv");
                       this.factorCol.resetDiv();
                     }
                     else {
