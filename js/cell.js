@@ -30,6 +30,8 @@ function ControllerCell(element, color, text) {
 
 function OperatorCell(element, color, text) {
   FactorCell.call(this, element, color, text);
+  this.addMediumFont(); 
+  this.textIndex = 0;
 }
 
 function TimerCell(element) {
@@ -238,6 +240,38 @@ KeypadCell.prototype.setDiv = function(answer) {
   this.showText();
 }
 
+// operator //
+
+OperatorCell.prototype.pause = function() {
+  Cell.prototype.deselect.call(this);
+}
+
+OperatorCell.prototype.textMap = {
+  0 : "\u00D7|\u00F7",
+  1 : "\u00D7",
+  2 : "\u00F7"
+}
+
+OperatorCell.prototype.consoleMap = {
+  0 : "multiply and divide",
+  1 : "multiply",
+  2 : "divide"
+}
+
+OperatorCell.prototype.toggle = function() {
+  this.textIndex = (this.textIndex + 1) % 3
+  this.changeText(this.textMap[this.textIndex])
+  if (this.textIndex == 0) {
+    this.addMediumFont(); 
+  }
+  else {
+    this.removeMediumFont(); 
+  }
+  this.showText();
+  console.log(this.consoleMap[this.textIndex]);
+  return this.textIndex;
+}
+
 // timer //
 
 TimerCell.prototype.show = function(total) {
@@ -286,7 +320,12 @@ TimerCell.prototype.select = function(quiz) {
     // trigger alarm 
     if (count <= 0) {
       console.log("count:", count);
-      quiz.show();
+      if (quiz.isMul) {
+        quiz.show();
+      }
+      else {
+        quiz.showDiv();
+      }
     }
   }, 1000);
 }

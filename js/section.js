@@ -43,7 +43,7 @@ Area.prototype.show = function(...args) {
 }
 
 Area.prototype.toggle = function(...args) {
-  this.get(args).toggle();
+  return this.get(args).toggle();
 }
 
 Area.prototype.get = function() {

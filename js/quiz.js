@@ -69,7 +69,7 @@ Quiz.prototype.ask = function() {
 }
 
 Quiz.prototype.askMul = function() {
-  console.log("what is", this.row, "x", this.col, "?");
+  console.log("what is", this.row, "\u00D7", this.col, "?");
   this.isMul = true;
   this.asked = true;
   this.factorRow.select(this.row);
@@ -111,7 +111,7 @@ Quiz.prototype.clearMul = function() {
   this.product.deselect(this.grader.getGrade(this.row, this.col),
                         this.row, this.col);
   setTimeout(() => {this.factorCol.deselect(this.col);}, this.clearDelay);
-  setTimeout(() => {this.operator.deselect();},          this.clearDelay*2);
+  setTimeout(() => {this.operator.deselect(this);},          this.clearDelay*2);
   setTimeout(() => {this.factorRow.deselect(this.row);}, this.clearDelay*3);
   setTimeout(() => {this.keypad.clear(this.row); 
                     this.timer.hide(this);},             this.clearDelay*2);
@@ -146,7 +146,27 @@ Quiz.prototype.toggleOperator = function() {
   if (this.play) {
     return;
   }
-  // division
+
+  if (this.isMul) {
+    this.show();
+  }
+  else {
+    this.showDiv();
+  }
+    
+  let opIndex = this.operator.toggle();
+  if (opIndex == 0) {
+    this.mul = true;
+    this.div = true;
+  }
+  else if (opIndex == 1) {
+    this.mul = true;
+    this.div = false;
+  }
+  else { // opIndex == 2
+    this.mul = false;
+    this.div = true;
+  }
 }
 
 Quiz.prototype.toggleFactorRow = function(k) {
@@ -244,7 +264,7 @@ Quiz.prototype.toggleTimer = function() {
 // division methods //
 
 Quiz.prototype.askDiv = function() {
-  console.log("what is", this.grader.getAnswer(this.row, this.col), "/", this.col, "?");
+  console.log("what is", this.grader.getAnswer(this.row, this.col), "\u00F7", this.col, "?");
   this.isMul = false;
   this.asked = true;
   if (this.divRow) {
@@ -292,15 +312,18 @@ Quiz.prototype.showDiv = function() {
     return;
   }
   this.answered = true;
+  let answer;
   if (this.divRow) {
     this.factorCol.select(this.col);
+    answer = this.col;
   }
   else {
     this.factorRow.select(this.row);
+    answer = this.row;
   }
   this.timer.stop();
   this.product.showDiv(this.row, this.col);
-  console.log("answer:", this.grader.getAnswer(this.row, this.col));
+  console.log("answer:", answer);
   setTimeout(() => {this.clearDiv();}, this.showDelay);
 }
 
@@ -313,7 +336,7 @@ Quiz.prototype.clearDiv = function() {
                     else {
                       this.factorCol.deselect(this.col);
                     }},                                     this.clearDelay);
-  setTimeout(() => {this.operator.deselect();},             this.clearDelay*2);
+  setTimeout(() => {this.operator.deselect(this);},         this.clearDelay*2);
   setTimeout(() => {if (this.divRow) {
                       this.factorRow.deselect(this.row);
                     }
@@ -323,7 +346,7 @@ Quiz.prototype.clearDiv = function() {
   setTimeout(() => {this.keypad.clearDiv(this.row); 
                     this.timer.hide(this);},                this.clearDelay*2);
   setTimeout(() => {this.asked = false; 
-                    this.query();},                      this.clearDelay*4);
+                    this.query();},                         this.clearDelay*4);
 }
 
 export {Quiz};
