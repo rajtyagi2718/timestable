@@ -22,4 +22,5 @@ const grader = new Grader();
 const quiz = new Quiz(operator, factorRow, factorCol, product, keypad,
                       controller, timer, grader);
 
+quiz.toggleOperator();
 quiz.toggleController();
