@@ -1,7 +1,7 @@
 # Times Tables Learning App
 https://rajtyagi2718.github.io/timestable/
 
-![alt text](https://github.com/rajtyagi2718/timestable/blob/master/demo/demo.gif)
+![alt text](https://github.com/rajtyagi2718/timestable/blob/master/demo/demo0.gif)
 
 ## UI
 Click the keypad on the right side to select an answer. Correct answers fill the table to show progress in learning.
